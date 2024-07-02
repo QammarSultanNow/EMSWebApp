@@ -43,7 +43,7 @@ namespace EMSWebApp.Controllers
         [Route("Department/DeparmentsData")]
         public async Task<IActionResult> DeparmentsData()
         {
-            var result = await _repository.GetAllDepartment();
+            var result = await _repository.EmployeeCount();
             return View(result);
         }
 
@@ -71,6 +71,8 @@ namespace EMSWebApp.Controllers
             var result = await _repository.DeleteDepartment(id);
             return RedirectToAction("DeparmentsData");
         }
+
+
 
     }
 }

@@ -23,12 +23,17 @@ namespace EMSWebApp.Repository
             return false;
         }
 
-       
-
         public async Task<IEnumerable<Department>> GetAllDepartment()
         {
-            var result = await _context.tblDepartment.ToListAsync();
-            return result;
+            try
+            {
+                var result = await _context.tblDepartment.ToListAsync();
+                return result;
+            }
+            catch (Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
 
         }
 
@@ -64,6 +69,30 @@ namespace EMSWebApp.Repository
             _context.tblDepartment.Remove(result);
             await _context.SaveChangesAsync();
             return result.Id;
+        }
+
+        public async Task<IEnumerable<DepartmentEmployeeCount>> EmployeeCount()
+        {
+            try
+            {
+                var result = await _context.tblDepartment.ToListAsync();
+                var res = (from dpt in result
+                           join emp in _context.EmployeeInformationtbl
+                           on dpt.Id equals emp.DepartmentId into deptGroup
+                           select new DepartmentEmployeeCount
+                           {
+                               Id = dpt.Id,
+                               DepartmentName = dpt.DepartmentName,
+                               EmployeeCount = deptGroup.Count()
+                           }).ToList();
+
+                return res;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
     }
 }

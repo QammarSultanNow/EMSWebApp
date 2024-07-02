@@ -9,5 +9,6 @@ namespace EMSWebApp.Interface
         Task<int> UpdateDepartment(Department department, int id);
         Task<Department> GetAllDepartmentById(int id);
         Task<int> DeleteDepartment(int id);
+        Task<IEnumerable<DepartmentEmployeeCount>> EmployeeCount();
     }
 }

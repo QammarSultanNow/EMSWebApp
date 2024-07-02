@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EMSWebApp.Models.Department>
+﻿@model IEnumerable<EMSWebApp.Models.DepartmentEmployeeCount>
 @{
     ViewData["Title"] = "DeparmentsData";
 }
@@ -10,6 +10,7 @@
         <tr>
 
             <th>Name</th>
+            <th>Employee Count</th>
             <th>Actions</th>
           
         </tr>
@@ -19,6 +20,7 @@
         {
             <tr>
                 <td>@i.DepartmentName</td>
+                <td>@i.EmployeeCount</td>
                 
                 <td>
                     <button class="btn btn btn-success"><a style="color : white" href="/Department/GetDepartmentById/@i.Id">Edit</a></button>
@@ -34,6 +36,7 @@
     <tfoot>
         <tr>
             <th>Name</th>
+            <th>Employee Count</th>
             <th>Actions</th>
             
         </tr>
