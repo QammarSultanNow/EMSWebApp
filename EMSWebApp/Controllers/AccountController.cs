@@ -86,11 +86,10 @@ namespace EMSWebApp.Controllers
         }
 
 
-        [Route("Account/GetAllEmployees")]
-        public async Task<IActionResult> GetAllEmployees()
+        [Route("Account/GetAllEmployees/{id?}")]
+        public async Task<IActionResult> GetAllEmployees(int id)
         {
-
-            var result = await _repository.GetAllEmployee();
+            var result = await _repository.GetAllEmployee(id);
             return View(result);
         }
 

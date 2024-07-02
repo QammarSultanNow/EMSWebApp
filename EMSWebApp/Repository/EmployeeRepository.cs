@@ -30,11 +30,21 @@ namespace EMSWebApp.Repository
             return false;
         }
 
-        public async Task<IEnumerable<EmployeeViewModel>> GetAllEmployee()
+        public async Task<IEnumerable<EmployeeViewModel>> GetAllEmployee(int id)
         {
-          var result = await _context.EmployeeInformationtbl.Include("Department").ToListAsync();
 
-            var res = (from emp in result
+            IQueryable<EmployeeInformation> employee;
+
+            if(id > 0)
+            {
+                employee = _context.EmployeeInformationtbl.Where(x => x.DepartmentId == id);
+            }
+            else
+            {
+                employee = _context.EmployeeInformationtbl.Include("Department");
+            }
+
+            var res = (from emp in employee
                        join usr in _context.Users
                        on emp.CreatedBy equals usr.Id
                        select new EmployeeViewModel

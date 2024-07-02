@@ -65,6 +65,8 @@ namespace EMSWebApp.Controllers
             return RedirectToAction("AddDepartmentAsync");
         }
 
+        
+
         [Route("Department/DeleteDepartment/{id}")]
         public async Task<IActionResult> DeleteRepository(int id)
         {
