@@ -1,0 +1,21 @@
+﻿@model EMSWebApp.Models.Department
+@{
+    ViewData["Title"] = "GetDepartmentById";
+}
+
+<h1>Update Deparment Name</h1>
+
+<div class="container" style="border: 2px solid black; margin : auto">
+    <form action="/Department/UpdateDepartmentName/@Model.Id">
+
+        <div class="mb-3">
+            <label for="">DepartmentName</label>
+            <input type="text" name="DepartmentName" value="@Model.DepartmentName" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Name">
+        </div>
+
+        <div style="margin-top: 25px;">
+            <button type="submit" class="btn btn-primary" style="margin-top: 10px">Submit</button>
+        </div>
+
+    </form>
+</div>
