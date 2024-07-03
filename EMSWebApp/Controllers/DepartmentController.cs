@@ -19,59 +19,86 @@ namespace EMSWebApp.Controllers
             return View();
         }
 
-        
+
         [Route("Department/DepartmentForm")]
         public IActionResult DepartmentForm()
         {
             return View();
         }
 
-        
+
         [Route("Department/AddDepartmentAsync")]
         public async Task<IActionResult> AddDepartmentAsync(Department department)
         {
-            var result = await _repository.AddDepartment(department);
-            if (result == true)
+            try
             {
+                var result = await _repository.AddDepartment(department);
                 return RedirectToAction("DeparmentsData");
             }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
 
-            return RedirectToAction("AddDepartmentAsync");
         }
 
-       
+
         [Route("Department/DeparmentsData")]
         public async Task<IActionResult> DeparmentsData()
         {
-            var result = await _repository.EmployeeCount();
-            return View(result);
+            try
+            {
+                var result = await _repository.EmployeeCount();
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
 
         [Route("Department/GetDepartmentById/{id}")]
         public async Task<IActionResult> GetDepartmentById(int id)
         {
-            var result = await _repository.GetAllDepartmentById(id);
-            return View(result);
+            try
+            {
+                var result = await _repository.GetAllDepartmentById(id);
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [Route("Department/UpdateDepartmentName/{id}")]
         public async Task<IActionResult> UpdateDepartmentName(Department department, int id)
         {
-            var result = await _repository.UpdateDepartment(department, id);
-            if(result > 0)
+            try
             {
+                var result = await _repository.UpdateDepartment(department, id);
                 return RedirectToAction("DeparmentsData");
             }
-            return RedirectToAction("AddDepartmentAsync");
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
-
-        
 
         [Route("Department/DeleteDepartment/{id}")]
         public async Task<IActionResult> DeleteRepository(int id)
         {
-            var result = await _repository.DeleteDepartment(id);
-            return RedirectToAction("DeparmentsData");
+            try
+            {
+                var result = await _repository.DeleteDepartment(id);
+                return RedirectToAction("DeparmentsData");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
 
 

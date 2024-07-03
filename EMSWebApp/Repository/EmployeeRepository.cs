@@ -125,7 +125,18 @@ namespace EMSWebApp.Repository
 
         }
 
+        public async Task<DepartmentEmployeeTotals> DepartmentEmployeeCounting()
+        {
+            var dptCount = await _context.tblDepartment.CountAsync();
+            var empCount = await _context.EmployeeInformationtbl.CountAsync();
 
+            var result = new DepartmentEmployeeTotals
+            {
+                DepartmentCount = dptCount,
+                EmployeeCount = empCount
+            };
+            return result;  
+        }
 
     }
 }
