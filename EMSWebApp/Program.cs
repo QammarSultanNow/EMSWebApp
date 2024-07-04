@@ -1,8 +1,10 @@
 using EMSWebApp.Data;
 using EMSWebApp.Interface;
 using EMSWebApp.Repository;
+using EMSWebApp.Services;
 using EMSWebApp.UploadService;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace EMSWebApp
@@ -17,6 +19,7 @@ namespace EMSWebApp
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IUploadImageService, UploadImageService>();
+            builder.Services.AddScoped<IEmailSender, EmailVerificationService>();
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
