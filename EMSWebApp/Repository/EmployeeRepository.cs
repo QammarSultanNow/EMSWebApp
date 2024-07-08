@@ -21,8 +21,8 @@ namespace EMSWebApp.Repository
         public async Task<bool> AddEmplyee(EmployeeInformation employee)
         {
 
-          var results = await  _context.EmployeeInformationtbl.AddAsync(employee);
-           await _context.SaveChangesAsync();
+            var results = await _context.EmployeeInformationtbl.AddAsync(employee);
+            await _context.SaveChangesAsync();
             if (results != null)
             {
                 return true;
@@ -30,18 +30,27 @@ namespace EMSWebApp.Repository
             return false;
         }
 
-        public async Task<IEnumerable<EmployeeViewModel>> GetAllEmployee(int id)
+        public async Task<IEnumerable<EmployeeViewModel>> GetAllEmployee(string userId, int id)
         {
-
             IQueryable<EmployeeInformation> employee;
-
-            if(id > 0)
+            if (userId != null)
             {
-                employee = _context.EmployeeInformationtbl.Where(x => x.DepartmentId == id);
+                employee = _context.EmployeeInformationtbl.Include("Department").Where(x => x.CreatedBy == userId);
             }
+
             else
             {
-                employee = _context.EmployeeInformationtbl.Include("Department");
+
+
+                if (id > 0)
+                {
+                    employee = _context.EmployeeInformationtbl.Include("Department").Where(x => x.DepartmentId == id);
+                }
+                else
+                {
+
+                    employee = _context.EmployeeInformationtbl.Include("Department");
+                }
             }
 
             var res = (from emp in employee
@@ -62,81 +71,86 @@ namespace EMSWebApp.Repository
                        }).ToList();
 
 
-            return (IEnumerable<EmployeeViewModel>) res;
+            return (IEnumerable<EmployeeViewModel>)res;
         }
 
-        public async Task<EmployeeInformation> GetAllEmployeeById(int id)
+
+    
+
+    public async Task<EmployeeInformation> GetAllEmployeeById(int id)
+    {
+        var result = await _context.EmployeeInformationtbl.Include("Department").FirstOrDefaultAsync(e => e.Id == id);
+        if (result == null)
         {
-             var result = await _context.EmployeeInformationtbl.Include("Department").FirstOrDefaultAsync(e => e.Id == id);
-            if (result == null) 
-            { 
-               return null; 
-            }
-             return result;
+            return null;
         }
+        return result;
+    }
 
 
-        public async Task<int> UpdateEmplyeesRecord(EmployeeInformation employee, int id)
+    public async Task<int> UpdateEmplyeesRecord(EmployeeInformation employee, int id)
+    {
+        var result = await _context.EmployeeInformationtbl.Where(x => x.Id == id).FirstOrDefaultAsync();
+        if (result == null)
         {
-            var result = await _context.EmployeeInformationtbl.Where(x => x.Id == id).FirstOrDefaultAsync();
-            if (result == null)
-            {
-                throw new Exception("");
-            }
-
-            if(employee.ImagePath == null)
-            {
-                result.Name = employee.Name;
-                result.Email = employee.Email;
-                result.Adress = employee.Adress;
-                result.Designation = employee.Designation;
-                result.ContactNo = employee.ContactNo;
-                result.ModifiedOn = employee.ModifiedOn;
-                result.ModifiedBy = employee.ModifiedBy;
-
-            }
-            else
-            {
-                result.Name = employee.Name;
-                result.Email = employee.Email;
-                result.Adress = employee.Adress;
-                result.Designation = employee.Designation;
-                result.ModifiedOn = employee.ModifiedOn;
-                result.ModifiedBy = employee.ModifiedBy;
-                result.ContactNo = employee.ContactNo;
-                result.ImagePath = employee.ImagePath;
-            }
-           
-
-            await _context.SaveChangesAsync();
-            return result.Id;
+            throw new Exception("");
         }
 
-        public async Task<int> DeleteEmployeesRecord(int id)
+        if (employee.ImagePath == null)
         {
-            var result = await _context.EmployeeInformationtbl.Where(x => x.Id == id).FirstOrDefaultAsync();
-            if (result == null)
-            {
-                throw new Exception("");
-            }
-            _context.EmployeeInformationtbl.Remove(result);
-            await _context.SaveChangesAsync();
-            return result.Id;
+            result.Name = employee.Name;
+            result.Email = employee.Email;
+            result.Adress = employee.Adress;
+            result.Designation = employee.Designation;
+            result.ContactNo = employee.ContactNo;
+            result.ModifiedOn = employee.ModifiedOn;
+            result.ModifiedBy = employee.ModifiedBy;
 
         }
-
-        public async Task<DepartmentEmployeeTotals> DepartmentEmployeeCounting()
+        else
         {
-            var dptCount = await _context.tblDepartment.CountAsync();
-            var empCount = await _context.EmployeeInformationtbl.CountAsync();
-
-            var result = new DepartmentEmployeeTotals
-            {
-                DepartmentCount = dptCount,
-                EmployeeCount = empCount
-            };
-            return result;  
+            result.Name = employee.Name;
+            result.Email = employee.Email;
+            result.Adress = employee.Adress;
+            result.Designation = employee.Designation;
+            result.ModifiedOn = employee.ModifiedOn;
+            result.ModifiedBy = employee.ModifiedBy;
+            result.ContactNo = employee.ContactNo;
+            result.ImagePath = employee.ImagePath;
         }
+
+
+        await _context.SaveChangesAsync();
+        return result.Id;
+    }
+
+    public async Task<int> DeleteEmployeesRecord(int id)
+    {
+        var result = await _context.EmployeeInformationtbl.Where(x => x.Id == id).FirstOrDefaultAsync();
+        if (result == null)
+        {
+            throw new Exception("");
+        }
+        _context.EmployeeInformationtbl.Remove(result);
+        await _context.SaveChangesAsync();
+        return result.Id;
 
     }
+
+    public async Task<DepartmentEmployeeTotals> DepartmentEmployeeCounting()
+    {
+        var dptCount = await _context.tblDepartment.CountAsync();
+        var empCount = await _context.EmployeeInformationtbl.CountAsync();
+
+        var result = new DepartmentEmployeeTotals
+        {
+            DepartmentCount = dptCount,
+            EmployeeCount = empCount
+        };
+        return result;
+    }
+
+
+
+}
 }

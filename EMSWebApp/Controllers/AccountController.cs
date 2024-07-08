@@ -73,12 +73,26 @@ namespace EMSWebApp.Controllers
 
 
         [Route("Account/GetAllEmployees/{id?}")]
-        public async Task<IActionResult> GetAllEmployees(int id)
+        public async Task<IActionResult> GetAllEmployees(EmployeeInformation employee, string userId,   int id )
         {
             try
             {
-                var result = await _repository.GetAllEmployee(id);
-                return View(result);
+               
+                if (User.IsInRole("Admin"))
+                {
+                    var result = await _repository.GetAllEmployee(userId, id);
+                    return View(result);
+                }
+                else
+                {
+                    employee.CreatedBy = _userManager.GetUserId(User);
+                    userId = employee.CreatedBy;
+
+                    var userResults = await _repository.GetAllEmployee(userId, id);
+                    return View(userResults);
+                }
+
+                
             }
             catch (Exception ex)
             {

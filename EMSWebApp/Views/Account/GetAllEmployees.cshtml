@@ -5,7 +5,7 @@
 }
 
 <h1>All Employee Data</h1>
-@await Component.InvokeAsync("Employee");
+@await Component.InvokeAsync("Employee")
 <table class="table table-striped">
     <thead>
         <tr>
@@ -22,8 +22,13 @@
         </tr>
     </thead>
     <tbody>
+        @if (TempData["Message"] != null)
+        {
+            <tr><h2 class="btn btn-danger"> @TempData["Message"]</h2></tr>
+        }
         @foreach (var i in Model)
         {
+         
             <tr>
                 <td style="display:none">@i.Id</td>
                 <td>@i.Name</td>

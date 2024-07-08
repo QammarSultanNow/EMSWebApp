@@ -10,6 +10,6 @@ namespace EMSWebApp.Interface
         DbSet<Department> tblDepartment { get; set; }
         Task<int> SaveChangesAsync();
 
-        IDbConnection CreateConnection();
+        
     }
 }

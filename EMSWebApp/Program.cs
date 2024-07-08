@@ -1,6 +1,9 @@
 using EMSWebApp.Data;
+using EMSWebApp.IdentityModel;
 using EMSWebApp.Interface;
 using EMSWebApp.Repository;
+using EMSWebApp.Roles;
+using EMSWebApp.Seed;
 using EMSWebApp.Services;
 using EMSWebApp.UploadService;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +23,7 @@ namespace EMSWebApp
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IUploadImageService, UploadImageService>();
             builder.Services.AddScoped<IEmailSender, EmailVerificationService>();
+        
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -27,12 +31,23 @@ namespace EMSWebApp
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => {
+            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            {
                 options.SignIn.RequireConfirmedAccount = true;
+
             })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             builder.Services.AddControllersWithViews();
 
+
+           
+
+
+            SeedRoles.DefaultRoles(builder.Services.BuildServiceProvider());
+            SeedUsers.DefaultUser(builder.Services.BuildServiceProvider());
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
