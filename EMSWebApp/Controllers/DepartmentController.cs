@@ -1,5 +1,5 @@
-﻿using EMSWebApp.Interface;
-using EMSWebApp.Models;
+﻿using ApplicationCore.Models;
+using EMSWebApp.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

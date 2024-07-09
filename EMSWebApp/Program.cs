@@ -1,14 +1,18 @@
-using EMSWebApp.Data;
-using EMSWebApp.IdentityModel;
+using ApplicationCore;
+using Infrastructure;
+using ApplicationCore.Data;
+using ApplicationCore.Interfaces;
 using EMSWebApp.Interface;
 using EMSWebApp.Repository;
 using EMSWebApp.Roles;
 using EMSWebApp.Seed;
 using EMSWebApp.Services;
-using EMSWebApp.UploadService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+using Infrastructure.Repositories;
+
 
 namespace EMSWebApp
 {
@@ -18,12 +22,14 @@ namespace EMSWebApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            //builder.Services.AddSingleton<IApplicationDbContext, ApplicationDbContext>();
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            builder.Services.AddScoped<IUploadImageService, UploadImageService>();
+            //Add Extension Method
+            builder.Services.RegisterApplicationCoreServices();
+            builder.Services.RegisterInfrastructureServices();
+
+            //
+           
             builder.Services.AddScoped<IEmailSender, EmailVerificationService>();
-        
+
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -36,18 +42,14 @@ namespace EMSWebApp
                 options.SignIn.RequireConfirmedAccount = true;
 
             })
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+          .AddRoles<IdentityRole>()
+          .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddControllersWithViews();
 
-
-           
-
-
             SeedRoles.DefaultRoles(builder.Services.BuildServiceProvider());
             SeedUsers.DefaultUser(builder.Services.BuildServiceProvider());
-            
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

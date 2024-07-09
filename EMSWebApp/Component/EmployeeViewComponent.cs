@@ -1,6 +1,5 @@
-﻿using EMSWebApp.Data;
+﻿using ApplicationCore.Interfaces;
 using EMSWebApp.Interface;
-using EMSWebApp.Models;
 using EMSWebApp.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

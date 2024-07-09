@@ -1,4 +1,4 @@
-namespace EMSWebApp.Models
+namespace EMSWebApp.Model
 {
     public class ErrorViewModel
     {

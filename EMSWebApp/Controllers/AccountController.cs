@@ -1,12 +1,12 @@
 ﻿using EMSWebApp.Interface;
-using EMSWebApp.Models;
-using EMSWebApp.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System;
+using ApplicationCore.Models;
+using ApplicationCore.Interfaces;
 
 
 namespace EMSWebApp.Controllers
