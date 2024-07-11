@@ -16,7 +16,7 @@ namespace ApplicationCore.Models
         public string ContactNo { get; set; }
         public string ImagePath { get; set; }
         public Department Department { get; set; }
-        public string CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         public string UserName { get; set; }
     }
    

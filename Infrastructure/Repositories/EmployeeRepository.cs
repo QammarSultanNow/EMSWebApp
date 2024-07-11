@@ -62,7 +62,7 @@ namespace Infrastructure.Repositories
                            ContactNo = emp.ContactNo,
                            ImagePath = emp.ImagePath,
                            Department = emp.Department,
-                           CreatedOn = emp.CreatedOn,
+                           CreatedOn = DateTime.Parse(emp.CreatedOn),
                            UserName = usr.UserName,
                        }).ToList();
 
