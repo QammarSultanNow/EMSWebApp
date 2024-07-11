@@ -3,30 +3,28 @@
     ViewData["Title"] = "DepartmentForm";
 }
 
+<div id="wrapper">
+    <div class="container-fluid">
+        
+            <div>
+                <div class="shadow p-3 mb-5 bg-white rounded">
+                    <h2>Department Registration Form </h2>
+                    <form action="/Department/AddDepartmentAsync">
+                        <div class="mb-3">
+                            <label for="">Department Name</label>
+                            <input type="text" name="DepartmentName" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Department Name" required>
+                        </div>
 
+                        <div class="d-grid gap-2" style="margin-top: 25px;">
+                            <button type="submit" class="btn btn-primary" style="margin-top: 10px">Submit</button>
 
-<div class="row">
-    <div class="col-2">
-    </div>
-    <div class="col-8">
-        <div class="container">
-            <h1>Register Department </h1>
-            <form action="/Department/AddDepartmentAsync">
-                <div class="mb-3">
-                    <label for="">DepartmentName</label>
-                    <input type="text" name="DepartmentName" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter DepartmentName" required>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="d-grid gap-2" style="margin-top: 25px;">
-                    <button type="submit" class="btn btn-primary" style="margin-top: 10px">Submit</button>
-
-                </div>
-            </form>
-        </div>
+            </div>
+           
     </div>
-
-    <div class="col-2">
-    </div>
-
 </div>
+
+
 
