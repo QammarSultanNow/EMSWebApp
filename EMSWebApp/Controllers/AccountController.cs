@@ -19,15 +19,17 @@ namespace EMSWebApp.Controllers
         private readonly IEmployeeRepository _repository;
         private readonly IDepartmentRepository _dptRrepository;
         private readonly IUploadImageService _image;
+        private readonly IExportEmployeeExcelSheet _exportEmployeeExcel;
         private readonly UserManager<IdentityUser> _userManager;
 
 
-        public AccountController(IEmployeeRepository repository, IDepartmentRepository dptRrepository, UserManager<IdentityUser> userManager, IUploadImageService image)
+        public AccountController(IEmployeeRepository repository, IDepartmentRepository dptRrepository, UserManager<IdentityUser> userManager, IUploadImageService image, IExportEmployeeExcelSheet exportEmployeeExcel)
         {
             _repository = repository;
             _dptRrepository = dptRrepository;
             _userManager = userManager;
             _image = image;
+            _exportEmployeeExcel = exportEmployeeExcel;
         }
 
         public IActionResult Index()
@@ -149,6 +151,18 @@ namespace EMSWebApp.Controllers
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+
+        [Route("Account/ExportEmployeeExcelSheet")]
+        public async Task<IActionResult> ExportEmployeeExcelSheet(string userId, int id)
+        {
+          byte[] excelSheet = await  _exportEmployeeExcel.DownloadEmployeeExcelSheet(userId, id);
+            var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            var fileName = "Employees.xlsx";
+
+            return File(excelSheet, contentType, fileName);
+            //return View();
         }
     }
 }

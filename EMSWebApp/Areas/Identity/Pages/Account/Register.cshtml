@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Register</title>
+    <title>EMS WebApp - Register</title>
 
     <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -70,10 +70,10 @@
                                 <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary btn-user btn-block">Register</button>
                                
                                 <hr>
-                                <a href="index.html" class="btn btn-google btn-user btn-block">
+                                <a id="registerWithGoogle" class="btn btn-google btn-user btn-block">
                                     <i class="fab fa-google fa-fw"></i> Register with Google
                                 </a>
-                                <a href="index.html" class="btn btn-facebook btn-user btn-block">
+                                <a id="registerWithFacebook" class="btn btn-facebook btn-user btn-block">
                                     <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
                                 </a>
                             </form>
@@ -105,7 +105,17 @@
 </body>
 
 </html>
+<script>
+    $(document).ready(function () {
+        $("#registerWithGoogle").on("click", function () {
+            alert("This option is not available right now");
+        });
 
+        $("#registerWithFacebook").on("click", function () {
+            alert("This option is not available right now");
+        });
+    });
+</script>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

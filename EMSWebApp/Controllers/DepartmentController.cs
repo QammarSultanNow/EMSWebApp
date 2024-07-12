@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Models;
+﻿using ApplicationCore.Interfaces;
+using ApplicationCore.Models;
 using EMSWebApp.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,11 @@ namespace EMSWebApp.Controllers
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository _repository;
-        public DepartmentController(IDepartmentRepository repository)
+        private readonly IExportEmployeeExcelSheet _exportEmployeeExcel;
+        public DepartmentController(IDepartmentRepository repository, IExportEmployeeExcelSheet exportEmployeeExcel)
         {
             _repository = repository;
+            _exportEmployeeExcel = exportEmployeeExcel;
         }
         public IActionResult Index()
         {
@@ -99,6 +102,18 @@ namespace EMSWebApp.Controllers
                 throw new Exception(ex.Message);
             }
 
+        }
+
+
+        [Route("Department/ExportEmployeeExcelSheet")]
+        public async Task<IActionResult> ExportEmployeeExcelSheet(string userId, int id)
+        {
+            byte[] excelSheet = await _exportEmployeeExcel.DownloadDepartmentExcelSheet();
+            var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            var fileName = "Departments.xlsx";
+
+            return File(excelSheet, contentType, fileName);
+          
         }
 
 
