@@ -12,10 +12,12 @@ namespace EMSWebApp.Controllers
     {
         private readonly IDepartmentRepository _repository;
         private readonly IExportEmployeeExcelSheet _exportEmployeeExcel;
-        public DepartmentController(IDepartmentRepository repository, IExportEmployeeExcelSheet exportEmployeeExcel)
+        private readonly ILogger<DepartmentController> _logger;
+        public DepartmentController(IDepartmentRepository repository, IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<DepartmentController> logger)
         {
             _repository = repository;
             _exportEmployeeExcel = exportEmployeeExcel;
+            _logger = logger;
         }
         public IActionResult Index()
         {
@@ -36,6 +38,7 @@ namespace EMSWebApp.Controllers
             try
             {
                 var result = await _repository.AddDepartment(department);
+                _logger.LogInformation("Added employee {EmployeeName} with ID {EmployeeId}", department.DepartmentName, department.Id);
                 return RedirectToAction("DeparmentsData");
             }
             catch (Exception ex)

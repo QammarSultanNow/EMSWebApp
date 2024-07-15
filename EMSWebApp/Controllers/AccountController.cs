@@ -22,14 +22,16 @@ namespace EMSWebApp.Controllers
         private readonly IExportEmployeeExcelSheet _exportEmployeeExcel;
         private readonly UserManager<IdentityUser> _userManager;
 
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IEmployeeRepository repository, IDepartmentRepository dptRrepository, UserManager<IdentityUser> userManager, IUploadImageService image, IExportEmployeeExcelSheet exportEmployeeExcel)
+        public AccountController(IEmployeeRepository repository, IDepartmentRepository dptRrepository, UserManager<IdentityUser> userManager, IUploadImageService image, IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<AccountController> logger)
         {
             _repository = repository;
             _dptRrepository = dptRrepository;
             _userManager = userManager;
             _image = image;
             _exportEmployeeExcel = exportEmployeeExcel;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -43,6 +45,7 @@ namespace EMSWebApp.Controllers
         {
             try
             {
+               
                 var result = await _dptRrepository.GetAllDepartment();
                 return View(result);
             }
@@ -65,6 +68,8 @@ namespace EMSWebApp.Controllers
                 employee.CreatedOn = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
 
                 var result = await _repository.AddEmplyee(employee);
+
+                _logger.LogInformation("Added employee {EmployeeName} with ID {EmployeeId}", employee.Name, employee.Id);
                 return RedirectToAction("GetAllEmployees");
             }
             catch (Exception ex)
