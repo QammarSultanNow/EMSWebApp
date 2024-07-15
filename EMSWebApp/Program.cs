@@ -17,6 +17,8 @@ using Serilog.Formatting.Compact;
 using Serilog.Sinks.MSSqlServer;
 using System.Collections.ObjectModel;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
+using Microsoft.AspNetCore.Builder;
+using static System.Net.Mime.MediaTypeNames;
 
 
 namespace EMSWebApp
@@ -30,7 +32,6 @@ namespace EMSWebApp
             //Add Extension Method
             builder.Services.RegisterApplicationCoreServices();
             builder.Services.RegisterInfrastructureServices();
-
             builder.Services.AddScoped<IEmailSender, EmailVerificationService>();
 
 
@@ -67,9 +68,13 @@ namespace EMSWebApp
 
                   ).CreateLogger();
 
-
             builder.Logging.AddSerilog(Log.Logger);
             Log.Information("SERILOG IS WORKING FINE");
+
+
+
+
+
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options =>
             {
@@ -97,7 +102,7 @@ namespace EMSWebApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseStatusCodePagesWithReExecute("/Error/NotFound");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

@@ -19,10 +19,10 @@ namespace EMSWebApp.Controllers
             _exportEmployeeExcel = exportEmployeeExcel;
             _logger = logger;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
 
         [Route("Department/DepartmentForm")]
