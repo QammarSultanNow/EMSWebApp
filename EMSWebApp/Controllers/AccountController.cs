@@ -45,7 +45,6 @@ namespace EMSWebApp.Controllers
         {
             try
             {
-               
                 var result = await _dptRrepository.GetAllDepartment();
                 return View(result);
             }
@@ -167,7 +166,6 @@ namespace EMSWebApp.Controllers
             var fileName = "Employees.xlsx";
 
             return File(excelSheet, contentType, fileName);
-            //return View();
         }
     }
 }

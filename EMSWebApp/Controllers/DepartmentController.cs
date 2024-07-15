@@ -38,7 +38,7 @@ namespace EMSWebApp.Controllers
             try
             {
                 var result = await _repository.AddDepartment(department);
-                _logger.LogInformation("Added employee {EmployeeName} with ID {EmployeeId}", department.DepartmentName, department.Id);
+               // _logger.LogInformation("Added employee {EmployeeName} with ID {EmployeeId}", department.DepartmentName, department.Id);
                 return RedirectToAction("DeparmentsData");
             }
             catch (Exception ex)
