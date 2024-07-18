@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ApplicationCore.AssetsModel.ListEmployeeAssetViewModel>
+<div class="container-fluid">
+
+ @* <div class="mb-2">
+        <button class="btn btn-success"> <a href="/Assets/AddAssets" class="text-light">Add Asset</a></button>
+ </div> *@
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Assigned Asset List</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Purchasing Price</th>
+                            <th>Status</th>
+                            <th>Assign TO</th>
+                            <th>CreatedAt </th>
+                            <th>CreatedBy</th>
+
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Purchasing Price</th>
+                            <th>Status</th>
+                            <th>Assign To</th>
+                            <th>CreatedAt </th>
+                            <th>CreatedBy</th>
+
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var i in Model)
+                        {
+                            <tr>
+                                <td style="display : none">@i?.Id</td>
+                                <td>@i.Asset_Name</td>
+                                <td>@i.Description</td>
+                                <td>@i.PurchasingPrice</td>
+                                <td>@i.Status</td>
+                                <td>@i.Emp_Name</td>
+                                <td>@i.CreatedAt</td>
+                                <td>@i.CreatedBy</td>
+                                @*  <td>
+                            <button class="btn btn-success"> <a href="/Assets/GetAssetsRecordById/@i.Id" class="text-light">Edit</a></button>
+                            <button class="btn btn-danger"> <a href="/Assets/DeleteAssetsRecords/@i.Id" class="text-light">Delete</a></button>
+                            </td> *@
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+

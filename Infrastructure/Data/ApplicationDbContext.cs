@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Interfaces;
+﻿using ApplicationCore.AssetsModel;
+using ApplicationCore.Interfaces;
 using ApplicationCore.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,8 @@ namespace ApplicationCore.Data
 
         public DbSet<EmployeeInformation> EmployeeInformationtbl { get; set; }
         public DbSet<Department> tblDepartment { get; set; }
+        public DbSet<Assets> tblAssets { get; set; }
+        public DbSet<EmployeeAssets> tblEmployeeAssets { get; set; }
 
 
         public async Task<int> SaveChangesAsync()

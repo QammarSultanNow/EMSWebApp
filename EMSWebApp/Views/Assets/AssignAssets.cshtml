@@ -1,0 +1,79 @@
+﻿@model ApplicationCore.AssetsModel.EmployeeAssestViewModel
+<h2>Assign Asset</h2>
+<hr />
+<table class="table table-bordered" id="" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Purchasing Price</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Created By</th>
+           
+    </thead>
+
+    <tfoot>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Purchasing Price</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Created By</th>
+          
+    </tfoot>
+    <tbody>
+        @foreach (var i in Model.Assets)
+        {
+            <tr>
+                <td>@i.Name</td>
+                <td>@i.Description</td>
+                <td>@i.PurchasingPrice</td>
+                <td>@i.Status</td>
+                <td>@i.CreatedAt</td>
+                <td>@i.CreatedBy</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+<hr />
+
+<form method="post" asp-controller="Assets" asp-action="AssignAssets">
+    <select class="form-control" name="AssetId" id="" style="display: none">
+        @foreach (var i in Model.Assets)
+        {
+            <option value="@i.Id"></option>
+        }
+    </select>
+    <div class="row">
+        <div class="col-6">
+            <label class="form-group" for="EmployeeId">Select Employee:</label>
+            <select class="form-control" name="EmployeeId" id="" required>
+                @foreach (var i in Model.Employees)
+                {
+                    <option value="@i.Id">@i.Name  <span>Designation: </span>@i.Designation</option>
+                }
+            </select>
+        </div>
+        <div class="col-6">
+            
+                <div class="form-group mt-2">
+                    <label for="">Remarks</label>
+                    <input type="text" class="form-control" id="" aria-describedby="emailHelp" value="" name="Remarks" placeholder="Enter assets Remarks" required>
+                </div>
+           
+        </div>
+        
+
+    </div>
+
+  
+
+  
+    <div class="form-group mt-2">
+
+        <button type="submit" class="btn btn-primary btn-user btn-block">Submit</button>
+    </div>
+</form>

@@ -23,6 +23,7 @@ namespace Infrastructure
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IUploadImageService, UploadImageService>();
             services.AddScoped<IExportEmployeeExcelSheet, ExportEmployeesExcelSheetService>();
+            services.AddScoped<IAssetsRepository, AssetsRepository>();
            
         }
     }

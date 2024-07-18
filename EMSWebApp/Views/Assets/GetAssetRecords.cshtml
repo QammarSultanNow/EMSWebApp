@@ -1,0 +1,90 @@
+﻿@model IEnumerable<ApplicationCore.AssetsModel.Assets>
+<div class="container-fluid">
+    <div class="mb-2">
+    <button class="btn btn-success"> <a href="/Assets/AddAssets" class="text-light">Add Asset</a></button>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Asset Detail</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+               
+
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Purchasing Price</th>
+                            <th>Status</th>
+                            <th>Assig To</th>
+                            <th>CreatedAt </th>
+                            <th>CreatedBy</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Purchasing Price</th>
+                            <th>Status</th>
+                            <th>Assig To</th>
+                            <th>CreatedAt </th>
+                            <th>CreatedBy</th>
+                            <th>Actions</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var i in Model)
+                        {
+                            <tr>
+                                <td>@i.Id</td>
+                                <td>@i.Name</td>
+                                <td>@i.Description</td>
+                                <td>@i.PurchasingPrice</td>
+                                <td>@i.Status</td>
+                                @if (@i.Status == "Available")
+                                {
+                                    <td><button class="btn btn-info"><a href="/Assets/AssignAssets/@i.Id">Assign</a></button></td>
+                                }
+
+                                else
+                                {
+                                    <td><button class="btn btn-light">Assigned</button></td>
+                                }
+                                <td>@i.CreatedAt</td>
+                                <td>@i.CreatedBy</td>
+                                <td>
+                                    <button style="padding: 0; border: none;background: none;">
+                                        <a style="color : white" href="">
+                                            <a href="/Assets/GetAssetsRecordById/@i.Id" class="btn btn-success btn-circle btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </a>
+                                    </button>
+
+
+                                    <button style="padding: 0; border: none;background: none;">
+                                        <a style="color : white" href="">
+                                            <a href="/Assets/DeleteAssetsRecords/@i.Id" class="btn btn-danger btn-circle btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </a>
+                                    </button>
+                                   
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,33 @@
+﻿@model ApplicationCore.AssetsModel.Assets
+<form method="post" asp-controller="Assets" asp-action="AddAssets">
+    <h2>ADD ASSET</h2>
+    <div class="form-group mt-2">
+        <label for="exampleInputEmail1">Name</label>
+        <input type="text" class="form-control" id="" aria-describedby="emailHelp" name="Name" placeholder="Enter assets Name" required>
+    </div>
+    <div class="form-group mt-2">
+        <label for="exampleInputEmail1">Description</label>
+        <input type="text" class="form-control" id="" aria-describedby="emailHelp" name="Description" placeholder="Enter assets Description" required>
+    </div>
+
+    <div class="form-group mt-2">
+        <label for="exampleInputEmail1">PurchasingPrice</label>
+        <input type="text" class="form-control" id="" aria-describedby="emailHelp" name="PurchasingPrice" placeholder="Enter assets PurchasingPrice" required>
+    </div>
+
+
+    <label class="form-group" for="Status">Status:</label>
+    <select class="form-control" name="Status" id="Status" required>
+        <option value="New">New</option>
+        <option value="Available">Available</option>
+        <option value="Reserved">Reserved</option>
+        <option value="Assigned">Assigned</option>
+        <option value="Unassigned">Unassigned</option>
+        <option value="OutOfService">Out Of Service</option>
+
+    </select>
+    <div class="form-group mt-2">
+
+        <button type="submit" class="btn btn-primary btn-user btn-block">Submit</button>
+    </div>
+</form>
