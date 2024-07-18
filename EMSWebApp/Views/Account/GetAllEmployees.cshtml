@@ -43,7 +43,8 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                          <th>Name / Email </th>
+                                          <th>Name </th>
+                                          <th>Email </th>
                                           <th>Address</th>
                                           <th>Designation</th>
                                           <th>Contact No</th>
@@ -57,7 +58,8 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                         <th>Name / Email</th>
+                                         <th>Name </th>
+                                         <th>Email </th>   
                                          <th>Address</th>
                                          <th>Designation</th>
                                          <th>Contact No</th>
@@ -79,7 +81,8 @@
                                     @foreach (var i in Model)
                                     {
                                         <tr class="odd">
-                                            <td>@i.Name <br /> @i.Emp_Email</td>
+                                            <td><a href="/Assets/ListAssestWithEmployee/@i.Id">@i.Name</a></td>
+                                            <td>@i.Emp_Email</td>
                                             <td>@i.Adress</td>
                                             <td>@i.Designation</td>
                                             <td>@i.ContactNo</td>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ApplicationCore.AssetsModel.Assets>
+﻿@model IEnumerable<ApplicationCore.AssetsModel.ListEmployeeAssetViewModel>
 <div class="container-fluid">
     <div class="mb-2">
     <button class="btn btn-success"> <a href="/Assets/AddAssets" class="text-light">Add Asset</a></button>
@@ -43,7 +43,7 @@
                         {
                             <tr>
                                 <td>@i.Id</td>
-                                <td>@i.Name</td>
+                                <td>@i.Asset_Name</td>
                                 <td>@i.Description</td>
                                 <td>@i.PurchasingPrice</td>
                                 <td>@i.Status</td>
@@ -54,7 +54,7 @@
 
                                 else
                                 {
-                                    <td><button class="btn btn-light">Assigned</button></td>
+                                    <td>@i.Emp_Name</td>
                                 }
                                 <td>@i.CreatedAt</td>
                                 <td>@i.CreatedBy</td>

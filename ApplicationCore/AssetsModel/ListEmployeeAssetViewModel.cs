@@ -10,27 +10,28 @@ namespace ApplicationCore.AssetsModel
     public class ListEmployeeAssetViewModel
     {
         public int Id { get; set; }
-        public string Emp_Name { get; set; }
-        public string Email { get; set; }
-        public string Address { get; set; }
-        public string Designation { get; set; }
+        public string? Emp_Name { get; set; }
+        public string? Email { get; set; }
+        public string? Address { get; set; }
+        public string? Designation { get; set; }
 
 
 
         //Asset Detail
-        public string Asset_Name { get; set; }
+        public int? AssetId { get; set; }    
+        public string? Asset_Name { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Required]
-        public int PurchasingPrice { get; set; }
+        public int? PurchasingPrice { get; set; }
 
         [Required]
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
-        public DateTime CreatedAt { get; set; }
-        public int CreatedBy { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public int? CreatedBy { get; set; }
         public DateTime? ModifiedAt { get; set; }
         public int? ModifiedBy { get; set; }
     }

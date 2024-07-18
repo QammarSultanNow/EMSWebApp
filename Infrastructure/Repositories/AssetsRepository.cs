@@ -28,11 +28,32 @@ namespace Infrastructure.Repositories
 
 
 
-        public async Task<IEnumerable<Assets>> GetAssetRecords(int? id)
+        public async Task<IEnumerable<ListEmployeeAssetViewModel>> GetAssetRecords()
         {
+            var res = from a in _context.tblAssets
+                      join e in _context.tblEmployeeAssets on a.Id equals e.AssetId into empAssetJoin
+                      from e in empAssetJoin.DefaultIfEmpty()
+                    
+
+                      join emp in _context.EmployeeInformationtbl
+                      on e.EmployeeId equals emp.Id  into empJoin
+                      from emp in empJoin.DefaultIfEmpty()
+                      select new ListEmployeeAssetViewModel
+
+                      {
+                          Id = a.Id,
+                          Asset_Name = a.Name,
+                          Description = a.Description,
+                          PurchasingPrice = a.PurchasingPrice,
+                          Status = a.Status,
+                          Emp_Name = emp.Name,
+                          CreatedAt = a.CreatedAt,
+                          CreatedBy = a.CreatedBy
+                      };
+
+            return res;
            
-             var assets = await _context.tblAssets.ToListAsync();
-             return assets;
+            
         }
 
         public async Task<Assets> GetAssetsRecordById(int id)
@@ -69,23 +90,23 @@ namespace Infrastructure.Repositories
 
         public async Task<EmployeeAssestViewModel> EmployeeAssetList(int? id)
         {
-            //IEnumerable<Assets> asset;
+            IEnumerable<Assets> asset;
 
-            //if (id > 0)
-            //{
-              var asset = await _context.tblAssets.Where(x => x.Id == id).ToListAsync();
-            //}
-            //else
-            //{
-            //    asset = await _context.tblAssets.ToListAsync();
-            //}
-             var empolyee = await _context.EmployeeInformationtbl.ToListAsync();
+            if (id > 0)
+            {
+                 asset = await _context.tblAssets.Where(x => x.Id == id).ToListAsync();
+            }
+            else
+            {
+                asset = await _context.tblAssets.ToListAsync();
+            }
+            var empolyee = await _context.EmployeeInformationtbl.ToListAsync();
             
 
 
             return new EmployeeAssestViewModel
             {
-                Assets = asset,
+                Assets = asset.ToList(),
                 Employees = empolyee,
             };
         }
@@ -103,12 +124,12 @@ namespace Infrastructure.Repositories
             return assignEmployeeAssets.Id;
         }
 
-        public async Task<IEnumerable<ListEmployeeAssetViewModel>> ListAssetandEmployee(int id)
+        public async Task<IEnumerable<ListEmployeeAssetViewModel>> ListAssetandEmployee(int? id)
         {
             IEnumerable<EmployeeAssets> list;
             if (id > 0)
             {
-                list = await _context.tblEmployeeAssets.Where(x => x.AssetId == id).ToListAsync();
+                list = await _context.tblEmployeeAssets.Where(x => x.EmployeeId == id).ToListAsync();
             }
             else
             {
@@ -122,6 +143,7 @@ namespace Infrastructure.Repositories
                       on e.EmployeeId equals emp.Id
                       select new ListEmployeeAssetViewModel
                       {
+                          Id = e.AssetId,
                           Asset_Name = asset.Name,
                           Description = asset.Description,
                           PurchasingPrice = asset.PurchasingPrice,
@@ -133,6 +155,22 @@ namespace Infrastructure.Repositories
             return res;
         }
 
+        public async Task<int> UnassignedAssetRepo(int id)
+        {
+         var result = await _context.tblAssets.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            result.Status = EssetEnum.Available.ToString();
+            _context.tblAssets.Update(result);
+            
+
+
+            var removeResult = await _context.tblEmployeeAssets.Where(x => x.AssetId == id).FirstOrDefaultAsync();
+            _context.tblEmployeeAssets.Remove(removeResult);
+            await _context.SaveChangesAsync();
+
+            return result.Id;
+
+        }
     }
     
 }

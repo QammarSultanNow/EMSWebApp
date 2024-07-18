@@ -41,11 +41,11 @@ namespace EMSWebApp.Controllers
 
 
         
-        public async Task<IActionResult> GetAssetRecords(int? id)
+        public async Task<IActionResult> GetAssetRecords()
         {
             try
             {
-                var result = await _assetsRepository.GetAssetRecords(id);
+                var result = await _assetsRepository.GetAssetRecords();
                 if (result == null)
                 {
                     throw new Exception();
@@ -112,6 +112,13 @@ namespace EMSWebApp.Controllers
 
             var result = await _assetsRepository.ListAssetandEmployee(id);
             return View(result);
+        }
+
+        public async Task<IActionResult> UnassignAsset(int id)
+        {
+
+            var result = await _assetsRepository.UnassignedAssetRepo(id);
+            return RedirectToAction("GetAssetRecords");
         }
     }
 }

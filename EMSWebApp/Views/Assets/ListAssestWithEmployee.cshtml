@@ -14,11 +14,13 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>Id</th>
                             <th>Name</th>
                             <th>Description</th>
                             <th>Purchasing Price</th>
                             <th>Status</th>
                             <th>Assign TO</th>
+                            <th>Unassigned</th>
                             <th>CreatedAt </th>
                             <th>CreatedBy</th>
 
@@ -26,11 +28,13 @@
                     </thead>
                     <tfoot>
                         <tr>
+                            <th>Id</th>
                             <th>Name</th>
                             <th>Description</th>
                             <th>Purchasing Price</th>
                             <th>Status</th>
                             <th>Assign To</th>
+                            <th>Unassigned</th>
                             <th>CreatedAt </th>
                             <th>CreatedBy</th>
 
@@ -40,12 +44,13 @@
                         @foreach (var i in Model)
                         {
                             <tr>
-                                <td style="display : none">@i?.Id</td>
+                                <td>@i.Id</td>
                                 <td>@i.Asset_Name</td>
                                 <td>@i.Description</td>
                                 <td>@i.PurchasingPrice</td>
                                 <td>@i.Status</td>
                                 <td>@i.Emp_Name</td>
+                                <td><button class="btn btn-info"><a href="/Assets/UnassignAsset/@i.Id">Unassign</a></button></td>
                                 <td>@i.CreatedAt</td>
                                 <td>@i.CreatedBy</td>
                                 @*  <td>
