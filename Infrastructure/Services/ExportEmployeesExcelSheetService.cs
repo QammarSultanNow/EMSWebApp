@@ -15,10 +15,12 @@ namespace Infrastructure.Services
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IDepartmentRepository _dptRrepository;
-        public ExportEmployeesExcelSheetService(IEmployeeRepository employeeRepository, IDepartmentRepository dptRrepository)
+        private readonly IAssetsRepository _assetsRepository;
+        public ExportEmployeesExcelSheetService(IEmployeeRepository employeeRepository, IDepartmentRepository dptRrepository, IAssetsRepository assetsRepository)
         {
             _employeeRepository = employeeRepository;
             _dptRrepository = dptRrepository;
+            _assetsRepository = assetsRepository;
         }
 
         public async Task<byte[]> DownloadDepartmentExcelSheet()
@@ -79,5 +81,42 @@ namespace Infrastructure.Services
              return package.GetAsByteArray();
             }
         }
+
+
+        public async Task<byte[]> DownloadDAssetExcelSheet()
+        {
+            var asset = await _assetsRepository.GetAssetRecords();
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var stream = new MemoryStream();
+            using (var package = new ExcelPackage(stream))
+            {
+                var worksheet = package.Workbook.Worksheets.Add("ListEmployeeAssetViewModel");
+
+                worksheet.Cells[1, 1].Value = "Name";
+                worksheet.Cells[1, 2].Value = "Description";
+                worksheet.Cells[1, 3].Value = "Purchasing Price";
+                worksheet.Cells[1, 3].Value = "Assign To";
+                worksheet.Cells[1, 4].Value = "Status";
+                worksheet.Cells[1, 5].Value = "Created At";
+                worksheet.Cells[1, 6].Value = "Created By";
+                int row = 2;
+                foreach (var ast in asset)
+                {
+                    worksheet.Cells[row, 1].Value = ast.Asset_Name;
+                    worksheet.Cells[row, 2].Value = ast.Description;
+                    worksheet.Cells[row, 3].Value = ast.PurchasingPrice;
+                    worksheet.Cells[row, 3].Value = string.IsNullOrEmpty(ast.Emp_Name) ? "Unassigned" : ast.Emp_Name;
+                    worksheet.Cells[row, 4].Value = ast.Status;
+                    worksheet.Cells[row, 5].Value = ast.CreatedAt.ToString("dddd, MMMM d, yyyy h:mm tt");
+                    worksheet.Cells[row, 6].Value = ast.CreatedBy;
+
+                    row++;
+                }
+
+                return package.GetAsByteArray();
+            }
+        }
+
     }
 }

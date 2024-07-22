@@ -11,5 +11,14 @@ namespace EMSWebApp.Controllers
             
             return View();
         }
+
+        [Route("Error/InternalServerError")]
+        public IActionResult InternalServerError()
+        {
+
+            return View();
+        }
+
+        
     }
 }

@@ -1,0 +1,18 @@
+﻿@model IEnumerable<ApplicationCore.Models.EmployeeInformation>
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+        <label class="form-group" for="EmployeeId">Select Employee:</label>
+        <select class="form-control" name="EmployeeId" id="" required>
+            @foreach (var i in Model)
+            {
+                <option value="@i.Id">@i.Name  <span>Designation: </span>@i.Designation</option>
+            }
+        </select>
+    </div>
+    </div>
+</div>

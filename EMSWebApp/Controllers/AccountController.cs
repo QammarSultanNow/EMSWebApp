@@ -34,10 +34,10 @@ namespace EMSWebApp.Controllers
             _logger = logger;
         }
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+        public IActionResult Index()
+        {
+            return View();
+        }
 
 
         [Route("Account/EmployeeRegistrationForm")]
@@ -68,7 +68,6 @@ namespace EMSWebApp.Controllers
 
                 var result = await _repository.AddEmplyee(employee);
 
-                _logger.LogInformation("Added employee {EmployeeName} with ID {EmployeeId}", employee.Name, employee.Id);
                 return RedirectToAction("GetAllEmployees");
             }
             catch (Exception ex)

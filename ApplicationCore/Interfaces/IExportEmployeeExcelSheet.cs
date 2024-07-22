@@ -10,5 +10,6 @@ namespace ApplicationCore.Interfaces
     {
         Task<byte[]> DownloadEmployeeExcelSheet(string userId, int id);
         Task<byte[]> DownloadDepartmentExcelSheet();
+        Task<byte[]> DownloadDAssetExcelSheet();
     }
 }

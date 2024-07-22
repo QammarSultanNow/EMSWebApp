@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<ApplicationCore.AssetsModel.ListEmployeeAssetViewModel>
+
+
 <div class="container-fluid">
     <div class="mb-2">
     <button class="btn btn-success"> <a href="/Assets/AddAssets" class="text-light">Add Asset</a></button>
@@ -7,6 +9,14 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Asset Detail</h6>
         </div>
+        <div class="align-self-end mt-3" style="margin-right :40px">
+            <a href="/Account/AssetExcelSheet" class="btn btn-secondary btn-icon-split">
+                <span class="icon text-white-50">
+                    <i class="fas fa-arrow-right"></i>
+                </span>
+                <span class="text">Export</span>
+            </a>
+        </div>
         <div class="card-body">
             <div class="table-responsive">
                
@@ -14,8 +24,9 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Id</th>
+                           
                             <th>Name</th>
+                            <th>Image</th>
                             <th>Description</th>
                             <th>Purchasing Price</th>
                             <th>Status</th>
@@ -27,8 +38,9 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Id</th>
+                            
                             <th>Name</th>
+                            <th>Image</th>
                             <th>Description</th>
                             <th>Purchasing Price</th>
                             <th>Status</th>
@@ -42,8 +54,17 @@
                         @foreach (var i in Model)
                         {
                             <tr>
-                                <td>@i.Id</td>
                                 <td>@i.Asset_Name</td>
+
+                                @if (string.IsNullOrEmpty(@i.ImagePath))
+                                {
+                                    <td><img src="~/dummy.png" width="50" height="50" style="border-radius :100% " /></td>
+                                }
+                                else
+                                {
+                                    <td><img src="~/@i.ImagePath" width="50" height="50" style="border-radius :100% "></td>
+                                }
+
                                 <td>@i.Description</td>
                                 <td>@i.PurchasingPrice</td>
                                 <td>@i.Status</td>
@@ -54,9 +75,9 @@
 
                                 else
                                 {
-                                    <td>@i.Emp_Name</td>
+                                    <td><a href="/Assets/ListAssestWithEmployee/@i.Emp_Id">@i.Emp_Name</a></td>
                                 }
-                                <td>@i.CreatedAt</td>
+                                <td>@i.CreatedAt.ToString("dddd, MMMM d, yyyy h:mm tt")</td>
                                 <td>@i.CreatedBy</td>
                                 <td>
                                     <button style="padding: 0; border: none;background: none;">

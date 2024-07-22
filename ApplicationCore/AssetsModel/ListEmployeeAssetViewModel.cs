@@ -9,16 +9,17 @@ namespace ApplicationCore.AssetsModel
 {
     public class ListEmployeeAssetViewModel
     {
-        public int Id { get; set; }
+        public int? Emp_Id { get; set; }
         public string? Emp_Name { get; set; }
         public string? Email { get; set; }
         public string? Address { get; set; }
         public string? Designation { get; set; }
-
+        
 
 
         //Asset Detail
-        public int? AssetId { get; set; }    
+        public int Id { get; set; }
+          
         public string? Asset_Name { get; set; }
 
         [Required]
@@ -29,9 +30,10 @@ namespace ApplicationCore.AssetsModel
 
         [Required]
         public string? Status { get; set; }
+        public string? ImagePath { get; set; }
 
-        public DateTime? CreatedAt { get; set; }
-        public int? CreatedBy { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string? CreatedBy { get; set; }
         public DateTime? ModifiedAt { get; set; }
         public int? ModifiedBy { get; set; }
     }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using ApplicationCore.AssetsModel;
 
 namespace Infrastructure.Services
 {
@@ -27,6 +28,24 @@ namespace Infrastructure.Services
                     image.CopyTo(stream);
                 }
                 employee.ImagePath = ImageName;
+            }
+        }
+
+        public async Task UploadAssetImage(Assets asset, [FromForm] IFormFile image)
+        {
+            if (image == null)
+            {
+                asset.ImagePath = null;
+            }
+            else
+            {
+                string ImageName = System.IO.Path.GetFileName(image.FileName);
+                string Path = "wwwroot\\" + ImageName;
+                using (var stream = new FileStream(Path, FileMode.Create))
+                {
+                    image.CopyTo(stream);
+                }
+                asset.ImagePath = ImageName;
             }
         }
 

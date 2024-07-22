@@ -134,11 +134,13 @@ namespace Infrastructure.Repositories
         {
             var dptCount = await _context.tblDepartment.CountAsync();
             var empCount = await _context.EmployeeInformationtbl.CountAsync();
+            var assetCount = await _context.tblAssets.CountAsync();
 
             var result = new DepartmentEmployeeTotals
             {
                 DepartmentCount = dptCount,
-                EmployeeCount = empCount
+                EmployeeCount = empCount,
+                AssetCount = assetCount
             };
             return result;
         }

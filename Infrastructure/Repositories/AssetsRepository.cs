@@ -26,17 +26,22 @@ namespace Infrastructure.Repositories
             return assets.Id;
         }
 
-
+        //public async Task<IEnumerable<Assets>> GetAllAssetData()
+        //{
+        //    var assestList = await _context.tblAssets.ToListAsync();
+        //    return assestList;
+        //}
 
         public async Task<IEnumerable<ListEmployeeAssetViewModel>> GetAssetRecords()
         {
+
             var res = from a in _context.tblAssets
                       join e in _context.tblEmployeeAssets on a.Id equals e.AssetId into empAssetJoin
                       from e in empAssetJoin.DefaultIfEmpty()
-                    
+
 
                       join emp in _context.EmployeeInformationtbl
-                      on e.EmployeeId equals emp.Id  into empJoin
+                      on e.EmployeeId equals emp.Id into empJoin
                       from emp in empJoin.DefaultIfEmpty()
                       select new ListEmployeeAssetViewModel
 
@@ -46,8 +51,10 @@ namespace Infrastructure.Repositories
                           Description = a.Description,
                           PurchasingPrice = a.PurchasingPrice,
                           Status = a.Status,
+                          ImagePath = a.ImagePath,  
+                          Emp_Id = emp.Id,
                           Emp_Name = emp.Name,
-                          CreatedAt = a.CreatedAt,
+                          CreatedAt =DateTime.Parse(a.CreatedAt),
                           CreatedBy = a.CreatedBy
                       };
 
@@ -69,7 +76,8 @@ namespace Infrastructure.Repositories
             result.Name = assets.Name;
             result.Description = assets.Description;
             result.PurchasingPrice = assets.PurchasingPrice;
-            result.Status = assets.Status;
+            //result.Status = assets.Status;
+            result.ImagePath = assets.ImagePath;    
 
             _context.tblAssets.Update(result);
             await _context.SaveChangesAsync();
@@ -149,7 +157,7 @@ namespace Infrastructure.Repositories
                           PurchasingPrice = asset.PurchasingPrice,
                           Status = asset.Status,
                           Emp_Name = emp.Name,
-                          CreatedAt = asset.CreatedAt,
+                          CreatedAt = DateTime.Parse(asset.CreatedAt),
                           CreatedBy = asset.CreatedBy,
                       };
             return res;
@@ -171,6 +179,14 @@ namespace Infrastructure.Repositories
             return result.Id;
 
         }
+
+       public async Task<IEnumerable<EmployeeInformation>> GetEmployeeListOnDepartmentIdRepo(int id)
+        {
+            
+              var result = await _context.EmployeeInformationtbl.Where(x => x.DepartmentId == id).ToListAsync();
+              return result;
+        }
+
     }
     
 }

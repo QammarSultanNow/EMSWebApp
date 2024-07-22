@@ -10,6 +10,7 @@ namespace ApplicationCore.Models
     {
         public int DepartmentCount { get; set; }
         public int EmployeeCount { get; set; }
+        public int AssetCount { get; set; }
     }
     
 }

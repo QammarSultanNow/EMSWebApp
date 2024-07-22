@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.AssetsModel;
+using ApplicationCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace ApplicationCore.Interfaces
     public interface IAssetsRepository
     {
         Task<int> AddAssetsAsync(Assets assets);
+        //Task<IEnumerable<Assets>> GetAllAssetData();
         Task<IEnumerable<ListEmployeeAssetViewModel>> GetAssetRecords();
         Task<Assets> GetAssetsRecordById(int id);
         Task<int> UpdateAssetsRecords(Assets assets);
@@ -18,6 +20,9 @@ namespace ApplicationCore.Interfaces
         Task<int> AssignEmployeeAsset(EmployeeAssets assignEmployeeAssets);
         Task<IEnumerable<ListEmployeeAssetViewModel>> ListAssetandEmployee(int? id);
         Task<int> UnassignedAssetRepo(int id);
-    }
+        Task<IEnumerable<EmployeeInformation>> GetEmployeeListOnDepartmentIdRepo(int id);
+
+
+    } 
     
 }

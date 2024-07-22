@@ -68,7 +68,7 @@ namespace EMSWebApp
 
                   ).CreateLogger();
 
-            builder.Logging.AddSerilog(Log.Logger);
+            //builder.Logging.AddSerilog(Log.Logger);
             Log.Information("SERILOG IS WORKING FINE");
 
 
@@ -94,7 +94,7 @@ namespace EMSWebApp
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                //app.UseExceptionHandler("Error/error");
+                //app.UseExceptionHandler("/Error/InternalServerError");
                 app.UseMigrationsEndPoint();
             }
             else

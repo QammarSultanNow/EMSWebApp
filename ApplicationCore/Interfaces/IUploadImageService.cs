@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Models;
+﻿using ApplicationCore.AssetsModel;
+using ApplicationCore.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ namespace ApplicationCore.Interfaces
     public interface IUploadImageService
     {
         Task UploadImageByUser(EmployeeInformation employee, [FromForm] IFormFile image);
+        Task UploadAssetImage(Assets asset, [FromForm] IFormFile image);
     }
     
 }
