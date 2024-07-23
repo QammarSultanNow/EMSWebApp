@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ApplicationCore.Models.EmployeeInformation>
+﻿@model SelectList
 @{
     Layout = null;
 }
@@ -7,11 +7,7 @@
     <div class="col-12">
         <div class="form-group">
         <label class="form-group" for="EmployeeId">Select Employee:</label>
-        <select class="form-control" name="EmployeeId" id="" required>
-            @foreach (var i in Model)
-            {
-                <option value="@i.Id">@i.Name  <span>Designation: </span>@i.Designation</option>
-            }
+        <select class="form-control" name="EmployeeId" id="" required asp-items="Model">
         </select>
     </div>
     </div>

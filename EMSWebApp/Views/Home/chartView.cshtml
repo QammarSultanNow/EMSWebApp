@@ -1,0 +1,13 @@
+﻿@* <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/vendor/chart.js/Chart.min.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+
+@{
+    var myChart = new Chart(width: 600, height: 400)
+        .AddTitle("Chart Title")
+        .AddSeries(
+            name: "Employee",
+            xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "Dave" },
+            yValues: new[] { "2", "6", "4", "5", "3" })
+        .Write();
+} *@

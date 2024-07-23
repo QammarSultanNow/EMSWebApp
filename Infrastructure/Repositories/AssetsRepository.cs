@@ -77,8 +77,10 @@ namespace Infrastructure.Repositories
             result.Description = assets.Description;
             result.PurchasingPrice = assets.PurchasingPrice;
             //result.Status = assets.Status;
-            result.ImagePath = assets.ImagePath;    
-
+            if (assets.ImagePath != null)
+            {
+                result.ImagePath = assets.ImagePath;
+            }
             _context.tblAssets.Update(result);
             await _context.SaveChangesAsync();
             return result.Id;

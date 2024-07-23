@@ -90,7 +90,7 @@
                                             }
                                             else
                                             {
-                                                <td><img src="~/@i.ImagePath" width="50" height="50" style="border-radius :100% "></td>
+                                                <td><img class="imageResize" src="~/@i.ImagePath" width="50" height="50" style="border-radius :100% "></td>
                                             }
                                             
 
@@ -169,6 +169,21 @@
         </div>
     </div>
 
+    <!-- Image PopUp Modal-->
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body d-flex justify-content-center">
+                    <img class="modal-image" id="enlargedImage" />
+                </div>
+            </div>
+        </div>
+    </div>
    
 
 </body>
@@ -176,7 +191,18 @@
 </html>
 
 
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script>
 
+    $(document).ready(function(){
+        $('.imageResize').on('click' , function(){
+            var imgSrc = $(this).attr('src');
+            $('#enlargedImage').attr('src', imgSrc);
+            $('#imageModal').modal('show')
+          
+        })
+    })
+</script>
 
 
 

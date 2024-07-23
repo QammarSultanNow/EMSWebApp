@@ -88,6 +88,9 @@ namespace EMSWebApp.Controllers
         [Route("Assets/UpdateAssetsRecords")]
         public async Task<IActionResult> UpdateAssetsRecords(Assets assets , [FromForm] IFormFile image)
         {
+            assets.ModifiedAt = DateTime.Now;
+            assets.ModifiedBy = _userManager.GetUserId(User);
+
             await _uploadImageService.UploadAssetImage(assets, image);
 
 
@@ -161,7 +164,8 @@ namespace EMSWebApp.Controllers
         public async Task<IActionResult> GetEmployeeListOnDepartmentId(int departmentId)
         {
           var result =  await _assetsRepository.GetEmployeeListOnDepartmentIdRepo(departmentId);
-          return View(result);
+          var employeeList = new SelectList(result, "Id" , "Name");
+          return View(employeeList);
         }
     }
 }

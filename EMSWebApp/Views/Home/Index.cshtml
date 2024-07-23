@@ -142,34 +142,49 @@
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                            <div class="dropdown-header">Dropdown Header:</div>
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </div>
+                    
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="chart-pie pt-4 pb-2">
-                        <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                        <div class="chartjs-size-monitor">
+                            <div class="chartjs-size-monitor-expand">
+                                <div class="">
+
+
+                                </div>
+                            </div>
+                                <div class="chartjs-size-monitor-shrink">
+                                    <div class="">
+
+                                    </div>
+                                </div>
+                        </div>
                         <canvas id="myPieChart" width="428" height="306" style="display: block; height: 245px; width: 343px;" class="chartjs-render-monitor"></canvas>
                     </div>
+                   
                     <div class="mt-4 text-center small">
                         <span class="mr-2">
-                            <i class="fas fa-circle text-primary"></i> Direct
+                            <i class="fas fa-circle text-primary"></i> HR
                         </span>
                         <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> Social
+                            <i class="fas fa-circle text-success"></i> Admin
                         </span>
                         <span class="mr-2">
-                            <i class="fas fa-circle text-info"></i> Referral
+                            <i class="fas fa-circle text-info"></i> S&M
+                        </span>
+
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-black"></i> F&A
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-success"></i> WD 
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-danger"></i> P & E
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-warning"></i> MM
                         </span>
                     </div>
                 </div>
@@ -330,5 +345,75 @@
 
     <!-- Page level custom scripts -->
     <script src="/js/demo/chart-area-demo.js"></script>
-    <script src="/js/demo/chart-pie-demo.js"></script>
+   @*  <script src="/js/demo/chart-pie-demo.js"></script> *@
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/vendor/chart.js/Chart.min.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+            GetDepartmentsData();
+    })
+
+    function GetDepartmentsData(){
+        $.ajax({
+            type: "POST",
+            url: "/Home/GetDepartmentData",
+            data: "",
+            // contentType: "application/json; charset=utf-8",
+            // dataType: "json",
+            success: function (result) {
+                debugger
+                console.log(result);
+                var data = result;
+
+                var labels = [];
+                var values = [];
+                $.each(data, function (index, item) {
+                    //console.log(item.departmentName);
+                     labels.push(item.departmentName);
+                     values.push(item.employeeCount);
+                })
+   
+
+                // Create the chart
+                var ctx = document.getElementById('myPieChart').getContext('2d');
+                var myPieChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: values,
+                            backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#060c1e', '#46e046', '#de692f', '#d99a2e'],
+                            hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#09122d', '#1ac91a', '#ed5509', '#966003'],
+                            hoverBorderColor: "rgba(234, 236, 244, 1)",
+                        }],
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        tooltips: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyFontColor: "#858796",
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            xPadding: 15,
+                            yPadding: 15,
+                            displayColors: false,
+                            caretPadding: 10,
+                        },
+                        legend: {
+                            display: false
+                        },
+                        cutoutPercentage: 80,
+                    }
+                });
+            },
+            error: function (err) {
+                alert("error");
+            }
+        });
+    }
+    
+</script>
+
+                       
