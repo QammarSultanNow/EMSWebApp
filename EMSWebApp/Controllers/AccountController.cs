@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using ApplicationCore.Models;
 using ApplicationCore.Interfaces;
+using Microsoft.DotNet.Scaffolding.Shared;
+using ApplicationCore.ViewModel;
+using System.Security.Claims;
 
 
 namespace EMSWebApp.Controllers
@@ -21,10 +24,11 @@ namespace EMSWebApp.Controllers
         private readonly IUploadImageService _image;
         private readonly IExportEmployeeExcelSheet _exportEmployeeExcel;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
         private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IEmployeeRepository repository, IDepartmentRepository dptRrepository, UserManager<IdentityUser> userManager, IUploadImageService image, IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<AccountController> logger)
+        public AccountController(IEmployeeRepository repository, IDepartmentRepository dptRrepository, UserManager<IdentityUser> userManager, IUploadImageService image, IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<AccountController> logger, SignInManager<IdentityUser> signInManager)
         {
             _repository = repository;
             _dptRrepository = dptRrepository;
@@ -32,6 +36,7 @@ namespace EMSWebApp.Controllers
             _image = image;
             _exportEmployeeExcel = exportEmployeeExcel;
             _logger = logger;
+            _signInManager = signInManager;
         }
 
         public IActionResult Index()
@@ -165,6 +170,88 @@ namespace EMSWebApp.Controllers
             var fileName = "Employees.xlsx";
 
             return File(excelSheet, contentType, fileName);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> signinWithGoogle(string returnUrl)
+        {
+            var redirectUrl = Url.Action(action: "ExternalLoginCallback", controller: "Account", values: new { ReturnUrl = returnUrl });
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
+            return new ChallengeResult("Google", properties);
+
+            return View();
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback(string? returnUrl, string? remoteError)
+        {
+            returnUrl = returnUrl ?? Url.Content("~/");
+
+            LoginViewModel loginViewModel = new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+
+            if (remoteError != null)
+            {
+                ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
+
+                return View("Login", loginViewModel);
+            }
+
+            
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                ModelState.AddModelError(string.Empty, "Error loading external login information.");
+
+                return View("Login", loginViewModel);
+            }
+
+            
+            var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider,
+                info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+
+            if (signInResult.Succeeded)
+            {
+                return LocalRedirect(returnUrl);
+            }
+
+            // If there is no record in AspNetUserLogins table, the user may not have a local account
+            else
+            {
+                // Get the email claim value
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+                if (email != null)
+                {
+                    // Create a new user without password if we do not have a user already
+                    var user = await _userManager.FindByEmailAsync(email);
+
+                    if (user == null)
+                    {
+                        user = new IdentityUser
+                        {
+                            UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                            Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        };
+
+                        await _userManager.CreateAsync(user);
+                    }
+
+                    // Add a login (i.e., insert a row for the user in AspNetUserLogins table)
+                    await _userManager.AddLoginAsync(user, info);
+
+                    //Then Signin the User
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    return LocalRedirect(returnUrl);
+                }
+
+
+                return View("Error");
+            }
         }
     }
 }

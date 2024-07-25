@@ -27,7 +27,7 @@ namespace EMSWebApp
     {
         public static void Main(string[] args)
         {
-            
+
             var builder = WebApplication.CreateBuilder(args);
             //Add Extension Method
             builder.Services.RegisterApplicationCoreServices();
@@ -85,6 +85,17 @@ namespace EMSWebApp
           .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddAuthentication()
+            .AddGoogle(options =>
+            {
+                options.ClientId = "399084511617-t9giknkgagpbcc7saaum2tflbm2i37vp.apps.googleusercontent.com";
+                options.ClientSecret = "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";
+                // You can set other options as needed.
+            });
+
+
+
 
             SeedRoles.DefaultRoles(builder.Services.BuildServiceProvider());
             SeedUsers.DefaultUser(builder.Services.BuildServiceProvider());

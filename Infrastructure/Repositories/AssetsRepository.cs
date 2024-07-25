@@ -91,11 +91,18 @@ namespace Infrastructure.Repositories
             var result = await _context.tblAssets.Where(x => x.Id == id).FirstOrDefaultAsync();
             if (result != null)
             {
+               if (result.Status == "Assigned")
+               {
+                   var res =   await _context.tblEmployeeAssets.Where(x => x.AssetId == id).FirstOrDefaultAsync();
+                    _context.tblEmployeeAssets.Remove(res);
+                    
+                }
+
                 _context.tblAssets.Remove(result);
                 await _context.SaveChangesAsync();
                 return result.Id;
             }
-            return 0;
+              return 0;
         }
 
         public async Task<EmployeeAssestViewModel> EmployeeAssetList(int? id)

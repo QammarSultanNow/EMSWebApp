@@ -95,6 +95,7 @@ namespace Infrastructure.Repositories
                 result.Email = employee.Email;
                 result.Adress = employee.Adress;
                 result.Designation = employee.Designation;
+                result.DepartmentId = employee.DepartmentId;
                 result.ContactNo = employee.ContactNo;
                 result.ModifiedOn = employee.ModifiedOn;
                 result.ModifiedBy = employee.ModifiedBy;
@@ -135,12 +136,14 @@ namespace Infrastructure.Repositories
             var dptCount = await _context.tblDepartment.CountAsync();
             var empCount = await _context.EmployeeInformationtbl.CountAsync();
             var assetCount = await _context.tblAssets.CountAsync();
+            var assignedAssetCount = await _context.tblEmployeeAssets.CountAsync();
 
             var result = new DepartmentEmployeeTotals
             {
                 DepartmentCount = dptCount,
                 EmployeeCount = empCount,
-                AssetCount = assetCount
+                AssetCount = assetCount,
+                AssignedAssetCount = assignedAssetCount
             };
             return result;
         }

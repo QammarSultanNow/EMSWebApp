@@ -1,0 +1,37 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityUser
+
+<div id="wrapper">
+    <div class="container-fluid">
+
+        <div class=" shadow p-3 mb-5 bg-white rounded" ; margin : auto">
+            <h2>Update Employee Form</h2>
+            <form action="/Users/UpdateUsers/@Model.Id" method="post" enctype="multipart/form-data">
+
+                <div class="mb-3">
+                    <label for="">Name</label>
+                    <input type="text" name="UserName" value="@Model.UserName" class="form-control" id="" aria-describedby="emailHelp">
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="">Email</label>
+                    <input type="email" name="Email" value="@Model.Email" class="form-control" id="" aria-describedby="emailHelp" >
+                </div>
+
+@* 
+                <div class="mb-3">
+                <label for="">EmailConfirmed</label>
+                    <input type="text" name="Adress" value="@Model.EmailConfirmed" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div> *@
+
+
+                <div class="d-grid gap-2" style="margin-top: 25px;">
+                    <button type="submit" class="btn btn-primary" style="margin-top: 10px">Submit</button>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>
