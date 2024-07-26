@@ -1,8 +1,7 @@
 ﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
 
-@{
-    ViewData["Title"] = "";
-}
+
+
 
 
 <html lang="en">
@@ -13,7 +12,7 @@
           @*   @await Component.InvokeAsync("Employee") *@
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Employee Data</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Users Data</h6>
 
                 </div>
               @*   <div class="align-self-end mt-3" style="margin-right :40px">
@@ -33,6 +32,7 @@
                                     <th>UserName</th>
                                     <th>Email </th>
                                     <th>EmailConfirmed</th>
+                                    <th>Lock User</th>
                                     <th>Actions</th>
                                     
 
@@ -44,6 +44,7 @@
                                     <th>UserName</th>
                                     <th>Email </th>
                                     <th>EmailConfirmed</th>
+                                    <th>Lock User</th>
                                     <th>Actions</th>
 
                                 </tr>
@@ -55,6 +56,27 @@
                                         <td>@i.UserName</td>
                                         <td>@i.Email</td>
                                         <td>@i.EmailConfirmed</td>
+                                        @if (@i.LockoutEnd > DateTimeOffset.UtcNow)
+                                        {
+                                            <td><button class="btn btn-danger"> <a href="/Users/UnLockUser/@i.Id">
+                                                        <i class="fas fa-lock"></i>
+                                                    </a>
+                                                </button>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            
+                                           <td><button class="btn btn-success"> <a href="/Users/LockUser/@i.Id">
+                                                        <i class="fas fa-unlock"></i>
+                                                    </a>
+                                                </button>
+                                            </td>
+                                        }
+                                        
+                                     
+                                            
+                                      
                                         <td>
 
                                             <button style="padding: 0; border: none;background: none;">
@@ -107,43 +129,11 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Image PopUp Modal-->
-    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body d-flex justify-content-center">
-                    <img class="modal-image" id="enlargedImage" />
-                </div>
-            </div>
-        </div>
-    </div>
+  
 
 
 </body>
 
 </html>
+
+

@@ -26,6 +26,8 @@ namespace Infrastructure.Repositories
         public async Task<IdentityUser> GetUserById(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
+           
+
             return user;
         }
 
@@ -35,9 +37,10 @@ namespace Infrastructure.Repositories
            
                 user.UserName = identityUser.UserName;
                 user.Email = identityUser.Email;
+           
 
                 await _userManager.UpdateAsync(user);
-               
+
                 return user.Id;
         }
 
@@ -47,6 +50,38 @@ namespace Infrastructure.Repositories
             await _userManager.DeleteAsync(user);
 
             return user.Id;
+        }
+
+        public async Task<IdentityUser> LockUserRepo(string Id)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(Id);
+                if (user == null)
+                {
+                    return null;
+                }
+
+                DateTimeOffset? LockUserDate = DateTime.UtcNow.AddYears(2);
+                var res = await _userManager.SetLockoutEndDateAsync(user, LockUserDate);
+                await _userManager.SetLockoutEnabledAsync(user, true);
+                await _userManager.UpdateAsync(user);
+                return user;
+            }
+            catch (Exception ex) { 
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IdentityUser> UnclockUserRepo(string Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id);
+           // await _userManager.SetLockoutEnabledAsync(user, false);
+            DateTimeOffset? LockUserDate = DateTime.UtcNow;
+            await _userManager.SetLockoutEndDateAsync(user, LockUserDate);
+            await _userManager.UpdateAsync(user);
+            return user;
+
         }
     }
 }

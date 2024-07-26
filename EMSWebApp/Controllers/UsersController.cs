@@ -1,9 +1,11 @@
 ﻿using ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EMSWebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly IUserRepository _userRepository;
@@ -18,8 +20,16 @@ namespace EMSWebApp.Controllers
 
         public async Task<IActionResult> GetUsers()
         {
-            var result = await _userRepository.GetUserLists();
-            return View(result);
+            if (User.IsInRole("Admin"))
+            {
+                var result = await _userRepository.GetUserLists();
+                return View(result);
+            }
+            else
+            {
+                return RedirectToAction("Index" , "Home");
+            }
+            
         }
 
         public async Task<IActionResult> GetUsersById(string id)
@@ -43,5 +53,20 @@ namespace EMSWebApp.Controllers
             var result = await _userRepository.DeleteUsers(userId);
             return RedirectToAction("GetUsers");
         }
+
+       public async Task<IActionResult> LockUser(string Id)
+        {
+           var result =  await _userRepository.LockUserRepo(Id);
+
+            return RedirectToAction("GetUsers");
+        }
+
+        public async Task<IActionResult> UnLockUser(string Id)
+        {
+            var result = await _userRepository.UnclockUserRepo(Id);
+            return RedirectToAction("GetUsers");
+        }
+
+
     }
 }

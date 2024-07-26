@@ -13,5 +13,10 @@ namespace ApplicationCore.Interfaces
         Task<IdentityUser> GetUserById(string userId);
         Task<string> UpdateUser(IdentityUser identityUser);
         Task<string> DeleteUsers(string userId);
+
+        Task<IdentityUser> LockUserRepo(string Id);
+        Task<IdentityUser> UnclockUserRepo(string Id);
+
+
     }
 }

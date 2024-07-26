@@ -105,7 +105,7 @@ namespace EMSWebApp
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Error/InternalServerError");
+               // app.UseExceptionHandler("/Error/InternalServerError");
                 app.UseMigrationsEndPoint();
             }
             else
