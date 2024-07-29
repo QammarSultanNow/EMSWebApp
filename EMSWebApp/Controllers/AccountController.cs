@@ -87,7 +87,10 @@ namespace EMSWebApp.Controllers
         {
             try
             {
-               
+                var department = await _dptRrepository.GetAllDepartment();
+                ViewBag.Department = department;
+
+
                 if (User.IsInRole("Admin"))
                 {
                     var result = await _repository.GetAllEmployee(userId, id);
@@ -101,8 +104,8 @@ namespace EMSWebApp.Controllers
                     var userResults = await _repository.GetAllEmployee(userId, id);
                     return View(userResults);
                 }
+               
 
-                
             }
             catch (Exception ex)
             {
@@ -252,6 +255,13 @@ namespace EMSWebApp.Controllers
 
                 return View("Error");
             }
+        }
+
+
+        public async Task<IActionResult> GetEmployeeByDepartmentId(int deprtmentId)
+        {
+           var result =   await _repository.GetEmployeeByDepartmentId(deprtmentId);
+            return Json(result);  
         }
     }
 }

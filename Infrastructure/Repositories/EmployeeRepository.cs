@@ -29,7 +29,7 @@ namespace Infrastructure.Repositories
             return false;
         }
 
-        public async Task<IEnumerable<EmployeeViewModel>> GetAllEmployee(string userId, int id)
+        public async Task<IEnumerable<EmployeeViewModel>> GetAllEmployee(string userId, int id )
         {
             IQueryable<EmployeeInformation> employee;
             if (userId != null)
@@ -148,9 +148,11 @@ namespace Infrastructure.Repositories
             return result;
         }
 
-       
-
-
+        public async Task<IEnumerable<EmployeeInformation>> GetEmployeeByDepartmentId(int id)
+        {
+           var result = await _context.EmployeeInformationtbl.Where(x => x.DepartmentId == id).ToListAsync();
+            return result;
+        }
     }
 }
 

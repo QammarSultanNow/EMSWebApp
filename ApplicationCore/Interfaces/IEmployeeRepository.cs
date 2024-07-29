@@ -16,5 +16,6 @@ namespace ApplicationCore.Interfaces
         Task<int> UpdateEmplyeesRecord(EmployeeInformation employee, int id);
         Task<int> DeleteEmployeesRecord(int id);
         Task<DepartmentEmployeeTotals> DepartmentEmployeeCounting();
+        Task<IEnumerable<EmployeeInformation>> GetEmployeeByDepartmentId(int id);
     }
 }

@@ -32,7 +32,7 @@
                                     <th>UserName</th>
                                     <th>Email </th>
                                     <th>EmailConfirmed</th>
-                                    <th>Lock User</th>
+                                    <th>Lock/Unlock User</th>
                                     <th>Actions</th>
                                     
 
@@ -44,7 +44,7 @@
                                     <th>UserName</th>
                                     <th>Email </th>
                                     <th>EmailConfirmed</th>
-                                    <th>Lock User</th>
+                                    <th>Lock/Unlock User</th>
                                     <th>Actions</th>
 
                                 </tr>
@@ -52,10 +52,13 @@
                             <tbody>
                                @foreach(var i in Model)
                                {
+                                   
                                     <tr>
                                         <td>@i.UserName</td>
                                         <td>@i.Email</td>
                                         <td>@i.EmailConfirmed</td>
+
+
                                         @if (@i.LockoutEnd > DateTimeOffset.UtcNow)
                                         {
                                             <td><button class="btn btn-danger"> <a href="/Users/UnLockUser/@i.Id">
