@@ -89,11 +89,14 @@ namespace EMSWebApp.Controllers
             {
                 var department = await _dptRrepository.GetAllDepartment();
                 ViewBag.Department = department;
+                TempData["SelectedDepartmentId"] = id;
+                ViewBag.SelectedDepartmentId = TempData["SelectedDepartmentId"] as int?;
 
 
                 if (User.IsInRole("Admin"))
                 {
                     var result = await _repository.GetAllEmployee(userId, id);
+                  
                     return View(result);
                 }
                 else
@@ -102,6 +105,7 @@ namespace EMSWebApp.Controllers
                     userId = employee.CreatedBy;
 
                     var userResults = await _repository.GetAllEmployee(userId, id);
+                    TempData["SelectedDepartmentId"] = id;
                     return View(userResults);
                 }
                
