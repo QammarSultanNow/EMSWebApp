@@ -19,6 +19,10 @@ using System.Collections.ObjectModel;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Microsoft.AspNetCore.Builder;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.Extensions.Options;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 
 namespace EMSWebApp
@@ -84,9 +88,29 @@ namespace EMSWebApp
           .AddRoles<IdentityRole>()
           .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews()
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
+
+            builder.Services.AddLocalization(options =>
+            {
+                options.ResourcesPath = "Resources";
+            }); 
+
+
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en-US"),
+                    new CultureInfo("de-De"),
+                    new CultureInfo("ur-PK")
+                };
+                options.DefaultRequestCulture = new RequestCulture("en-US");
+                options.SupportedUICultures = supportedCultures;   
+            });
 
             builder.Services.AddAuthentication()
+
             .AddGoogle(options =>
             {
                 options.ClientId = "399084511617-t9giknkgagpbcc7saaum2tflbm2i37vp.apps.googleusercontent.com";
@@ -101,6 +125,8 @@ namespace EMSWebApp
             SeedUsers.DefaultUser(builder.Services.BuildServiceProvider());
 
             var app = builder.Build();
+
+            app.UseRequestLocalization();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

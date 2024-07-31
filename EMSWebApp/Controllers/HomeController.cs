@@ -2,6 +2,7 @@ using ApplicationCore.Interfaces;
 using EMSWebApp.Interface;
 using EMSWebApp.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System.Diagnostics;
 
 namespace EMSWebApp.Controllers
@@ -11,16 +12,20 @@ namespace EMSWebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IStringLocalizer<HomeController> _localizer;
 
-        public HomeController(ILogger<HomeController> logger, IDepartmentRepository departmentRepository, IEmployeeRepository employeeRepository)
+        public HomeController(ILogger<HomeController> logger, IDepartmentRepository departmentRepository, IEmployeeRepository employeeRepository, IStringLocalizer<HomeController> localizer)
         {
             _logger = logger;
             _departmentRepository = departmentRepository;
             _employeeRepository = employeeRepository;
+            _localizer = localizer;
         }
 
         public IActionResult Index()
         {
+          
+
             return View();
         }
 

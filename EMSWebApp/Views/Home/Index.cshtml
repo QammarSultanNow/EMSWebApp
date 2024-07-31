@@ -1,16 +1,30 @@
-﻿
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
 @{
     ViewData["Title"] = "Home Page";
 }
 
 
 
+<label for="" class="form-label">Choose a Language:</label>
+
+<select class="custom-select w-auto mb-2" aria-label="Default select example" name="" id="languageSelect" onchange="changeLanguage()">
+
+    <option value="">Choose a language</option>
+    <option value="en-US">English</option>
+    <option value="ur-PK">Urdu</option>
+   
+</select>
+
+<h1 style="background-color : aqua; text-align: center; font-family: 'Berlin Sans FB'" >
+    @Localizer["WelCome"]
+</h1>
 
 <div class="container-fluid">
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <h1 class="h3 mb-0 text-gray-800" style="font-family: 'Berlin Sans FB'">@Localizer["Dashboard"]</h1>
     </div>
 
     <!-- Content Row -->
@@ -25,7 +39,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Departments & Employees Relationship </h6>
+                    <h6 class="m-0 font-weight-bold text-primary">@Localizer["Departments & Employees Relationship"] </h6>
                     
                 </div>
                 <!-- Card Body -->
@@ -49,7 +63,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Departments & Employees Data</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">@Localizer["Departments & Employees Data"]</h6>
                     
                 </div>
                 <!-- Card Body -->
@@ -73,24 +87,22 @@
                    
                     <div class="mt-4 text-center small">
                         <span class="mr-2">
-                            <i class="fas fa-circle text-primary"></i> HR
+                            <i class="fas fa-circle text-primary"></i> @Localizer["HR"]
                         </span>
                         <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> Admin
+                            <i class="fas fa-circle text-success"></i> @Localizer["Admin"]
                         </span>
                         <span class="mr-2">
-                            <i class="fas fa-circle text-info"></i> S&M
+                            <i class="fas fa-circle text-info"></i> @Localizer["SM"]
                         </span>
 
                         <span class="mr-2">
-                            <i class="fas fa-circle text-black"></i> F&A
+                            <i class="fas fa-circle text-black"></i> @Localizer["FA"]
                         </span>
                         <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> WD 
+                            <i class="fas fa-circle text-success"></i> @Localizer["WD"]
                         </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-warning"></i> MM
-                        </span>
+                        
                     </div>
                 </div>
             </div>
@@ -254,7 +266,23 @@
    <script src="/js/demo/chart-area.js"></script> 
    <script src="/js/demo/chart-pie-demo.js"></script> 
 </div>
+<script>
+    $(document).ready(function () {
+        changeLanguage();
+    })
 
+    function changeLanguage() {
+        debugger
+        var selectedLanguage = document.getElementById("languageSelect").value;
+        if (selectedLanguage) {
+            var currentUrl = window.location.href;
+            var newUrl = new URL(currentUrl);
+            newUrl.searchParams.set("ui-culture", selectedLanguage);
+            window.location.href = newUrl.toString();
+        }
+
+    }
+</script>
 
 
                        

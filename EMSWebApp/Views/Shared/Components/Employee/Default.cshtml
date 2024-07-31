@@ -1,5 +1,8 @@
 ﻿@model ApplicationCore.Models.DepartmentEmployeeTotals
 
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+
 
     <div class="row">
         <div class="col-xl-3 col-md-6 mb-4">
@@ -8,7 +11,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Departments
+                            @Localizer["Department"]
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.DepartmentCount</div>
                         </div>
@@ -26,7 +29,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Employees
+                            @Localizer["Employees"] 
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.EmployeeCount</div>
                         </div>
@@ -44,7 +47,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-Info text-uppercase mb-1">
-                                Assets
+                            @Localizer["Assets"]  
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.AssetCount</div>
                         </div>
@@ -62,7 +65,7 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                           Assigned Assets
+                            @Localizer["Assigned Assets"]  
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.AssignedAssetCount</div>
                     </div>
