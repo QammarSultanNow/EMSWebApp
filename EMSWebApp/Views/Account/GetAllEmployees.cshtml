@@ -38,7 +38,7 @@
             <div class="mt-2">
 
 
-                <button class="@(ViewBag.SelectedDepartmentId == 0 ? "btn btn-success" : "btn btn-primary")" " id="AllEmployeeId" style="margin-bottom: 10px;">
+                <button class="@(ViewBag.SelectedDepartmentId == 0 ? "btn btn-success" : "btn btn-primary")" " id="" style="margin-bottom: 10px;">
                      <a class="text-white" href="/Account/GetAllEmployees">All Employees</a>
                      </button>
                 
@@ -217,10 +217,7 @@
         })
        
 
-        $('#AllEmployeeId').on('click' , function(e){
-             
-            document.getElementById('AllEmployeeId').style.backgroundColor = "#1CC88A";
-        })
+        
     }) 
 
    

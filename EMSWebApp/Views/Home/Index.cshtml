@@ -8,13 +8,14 @@
 
 <label for="" class="form-label">Choose a Language:</label>
 
-<select class="custom-select w-auto mb-2" aria-label="Default select example" name="" id="languageSelect" onchange="changeLanguage()">
+<select id="languageSelect" onchange="changeLanguage()" class="custom-select w-auto mb-2" aria-label="Default select example" name="">
 
     <option value="">Choose a language</option>
     <option value="en-US">English</option>
     <option value="ur-PK">Urdu</option>
    
 </select>
+
 
 <h1 style="background-color : aqua; text-align: center; font-family: 'Berlin Sans FB'" >
     @Localizer["WelCome"]
@@ -268,21 +269,35 @@
 </div>
 <script>
     $(document).ready(function () {
+        
         changeLanguage();
+       
     })
 
+   
+
+    
+
     function changeLanguage() {
-        debugger
+       debugger
         var selectedLanguage = document.getElementById("languageSelect").value;
         if (selectedLanguage) {
             var currentUrl = window.location.href;
             var newUrl = new URL(currentUrl);
             newUrl.searchParams.set("ui-culture", selectedLanguage);
             window.location.href = newUrl.toString();
+
+            var dropdown = document.getElementById("languageSelect").value;
+            var language = dropdown.value;
+            localStorage.setItem("languageKey", language)
+
+            var savedLanguage = localStorage.getItem("languageKey")
+            var dropdown = document.getElementById("languageSelect").value;
+
+            dropdown.value = savedLanguage ? "savedLanguage" : "";
         }
 
     }
 </script>
 
-
-                       
+                    

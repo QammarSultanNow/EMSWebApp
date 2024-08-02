@@ -25,7 +25,6 @@
         "wwwroot/js/sb-admin-2.min.js",
         "wwwroot/vendor/datatables/dataTables.bootstrap4.min.js",
         "wwwroot/js/demo/datatables-demo.js"
-
       ],
       "minify": {
         "enabled": true,

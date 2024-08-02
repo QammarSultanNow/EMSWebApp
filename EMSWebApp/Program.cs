@@ -23,6 +23,7 @@ using Microsoft.Extensions.Options;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Hangfire;
 
 
 namespace EMSWebApp
@@ -45,6 +46,9 @@ namespace EMSWebApp
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            // add hangfire
+            builder.Services.AddHangfire(config =>
+              config.UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection")));
 
 
             Log.Logger = new LoggerConfiguration()
@@ -152,6 +156,8 @@ namespace EMSWebApp
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
+
+            app.UseHangfireDashboard();
 
             app.Run();
         }
