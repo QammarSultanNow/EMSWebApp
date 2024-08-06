@@ -25,6 +25,7 @@ namespace Infrastructure
             services.AddScoped<IExportEmployeeExcelSheet, ExportEmployeesExcelSheetService>();
             services.AddScoped<IAssetsRepository, AssetsRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddTransient<IEmailService, EmailService>();
            
         }
     }

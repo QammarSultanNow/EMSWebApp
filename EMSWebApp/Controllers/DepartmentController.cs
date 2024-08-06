@@ -1,6 +1,11 @@
 ﻿using ApplicationCore.Interfaces;
 using ApplicationCore.Models;
+using ApplicationCore.UseCases.Departments.CreateDepartment;
+using ApplicationCore.UseCases.Departments.DeleteDepartment;
+using ApplicationCore.UseCases.Departments.GetDepartment;
+using ApplicationCore.UseCases.Departments.UpdateDepartment;
 using EMSWebApp.Interface;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,11 +18,15 @@ namespace EMSWebApp.Controllers
         private readonly IDepartmentRepository _repository;
         private readonly IExportEmployeeExcelSheet _exportEmployeeExcel;
         private readonly ILogger<DepartmentController> _logger;
-        public DepartmentController(IDepartmentRepository repository, IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<DepartmentController> logger)
+
+        private readonly IMediator _mediator;
+        public DepartmentController(IDepartmentRepository repository, IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<DepartmentController> logger, IMediator mediator)
         {
             _repository = repository;
             _exportEmployeeExcel = exportEmployeeExcel;
             _logger = logger;
+
+            _mediator = mediator;
         }
         //public IActionResult Index()
         //{
@@ -33,12 +42,11 @@ namespace EMSWebApp.Controllers
 
 
         [Route("Department/AddDepartmentAsync")]
-        public async Task<IActionResult> AddDepartmentAsync(Department department)
+        public async Task<IActionResult> AddDepartmentAsync(CreateDepartmentRequest request, Department department)
         {
             try
             {
-                var result = await _repository.AddDepartment(department);
-               // _logger.LogInformation("Added employee {EmployeeName} with ID {EmployeeId}", department.DepartmentName, department.Id);
+                var result = await _mediator.Send(request);
                 return RedirectToAction("DeparmentsData");
             }
             catch (Exception ex)
@@ -54,7 +62,7 @@ namespace EMSWebApp.Controllers
         {
             try
             {
-                var result = await _repository.EmployeeCount();
+                var result = await _mediator.Send(new GetDepartmentRequest());
                 return View(result);
             }
             catch (Exception ex)
@@ -79,11 +87,11 @@ namespace EMSWebApp.Controllers
         }
 
         [Route("Department/UpdateDepartmentName/{id}")]
-        public async Task<IActionResult> UpdateDepartmentName(Department department, int id)
+        public async Task<IActionResult> UpdateDepartmentName(UpdateDepartmentRequest request, Department department, int id)
         {
             try
             {
-                var result = await _repository.UpdateDepartment(department, id);
+                var result = await _mediator.Send(request);
                 return RedirectToAction("DeparmentsData");
             }
             catch (Exception ex)
@@ -97,7 +105,8 @@ namespace EMSWebApp.Controllers
         {
             try
             {
-                var result = await _repository.DeleteDepartment(id);
+                var result = await _mediator.Send(new DeleteDepartmentRequest { Id = id });
+                //var result = await _repository.DeleteDepartment(id);
                 return RedirectToAction("DeparmentsData");
             }
             catch (Exception ex)

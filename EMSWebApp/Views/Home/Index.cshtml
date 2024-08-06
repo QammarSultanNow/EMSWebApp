@@ -279,25 +279,18 @@
     
 
     function changeLanguage() {
-       debugger
+      
         var selectedLanguage = document.getElementById("languageSelect").value;
         if (selectedLanguage) {
             var currentUrl = window.location.href;
             var newUrl = new URL(currentUrl);
             newUrl.searchParams.set("ui-culture", selectedLanguage);
             window.location.href = newUrl.toString();
-
-            var dropdown = document.getElementById("languageSelect").value;
-            var language = dropdown.value;
-            localStorage.setItem("languageKey", language)
-
-            var savedLanguage = localStorage.getItem("languageKey")
-            var dropdown = document.getElementById("languageSelect").value;
-
-            dropdown.value = savedLanguage ? "savedLanguage" : "";
         }
 
     }
+
+  
 </script>
 
                     

@@ -10,6 +10,13 @@ using ApplicationCore.Interfaces;
 using Microsoft.DotNet.Scaffolding.Shared;
 using ApplicationCore.ViewModel;
 using System.Security.Claims;
+using MediatR;
+using ApplicationCore.UseCases.Employees.GetEmployees;
+using ApplicationCore.UseCases.Employees.CreateEmployee;
+using ApplicationCore.UseCases.Employees.UpdateEmployees;
+using ApplicationCore.UseCases.Employees.DeleteEmployees;
+using ApplicationCore.UseCases.Employees.GetEmployeesById;
+
 
 
 namespace EMSWebApp.Controllers
@@ -19,24 +26,26 @@ namespace EMSWebApp.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly IEmployeeRepository _repository;
+       // private readonly IEmployeeRepository _repository;
         private readonly IDepartmentRepository _dptRrepository;
         private readonly IUploadImageService _image;
         private readonly IExportEmployeeExcelSheet _exportEmployeeExcel;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
+        private readonly IMediator _mediator;
         private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IEmployeeRepository repository, IDepartmentRepository dptRrepository, UserManager<IdentityUser> userManager, IUploadImageService image, IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<AccountController> logger, SignInManager<IdentityUser> signInManager)
+        public AccountController(IEmployeeRepository repository, IDepartmentRepository dptRrepository, UserManager<IdentityUser> userManager, IUploadImageService image, IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<AccountController> logger, SignInManager<IdentityUser> signInManager, IMediator mediator)
         {
-            _repository = repository;
+            //_repository = repository;
             _dptRrepository = dptRrepository;
             _userManager = userManager;
             _image = image;
             _exportEmployeeExcel = exportEmployeeExcel;
             _logger = logger;
             _signInManager = signInManager;
+            _mediator = mediator;
         }
 
         public IActionResult Index()
@@ -62,16 +71,19 @@ namespace EMSWebApp.Controllers
 
 
         [Route("Account/AddEmployee")]
-        public async Task<IActionResult> AddEmployee(EmployeeInformation employee, [FromForm] IFormFile image)
+        public async Task<IActionResult> AddEmployee(CreateEmployeesRequest request, EmployeeInformation employee, [FromForm] IFormFile image)
         {
             try
             {
                 await _image.UploadImageByUser(employee, image);
 
-                employee.CreatedBy = _userManager.GetUserId(User);
-                employee.CreatedOn = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+                request.CreatedBy = _userManager.GetUserId(User);
+                request.CreatedOn = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+                request.ImagePath = employee.ImagePath;
 
-                var result = await _repository.AddEmplyee(employee);
+
+                 var result =  await _mediator.Send(request);
+              
 
                 return RedirectToAction("GetAllEmployees");
             }
@@ -95,8 +107,7 @@ namespace EMSWebApp.Controllers
 
                 if (User.IsInRole("Admin"))
                 {
-                    var result = await _repository.GetAllEmployee(userId, id);
-                  
+                    var result = await _mediator.Send(new GetEmployeeRequest(userId, id));
                     return View(result);
                 }
                 else
@@ -104,9 +115,9 @@ namespace EMSWebApp.Controllers
                     employee.CreatedBy = _userManager.GetUserId(User);
                     userId = employee.CreatedBy;
 
-                    var userResults = await _repository.GetAllEmployee(userId, id);
+                    var result = await _mediator.Send(new GetEmployeeRequest(userId, id));
                     TempData["SelectedDepartmentId"] = id;
-                    return View(userResults);
+                    return View(result);
                 }
                
 
@@ -122,7 +133,7 @@ namespace EMSWebApp.Controllers
         {
             try
             {
-                var result = await _repository.GetAllEmployeeById(id);
+                var result = await _mediator.Send(new GetEmployeesByIdRequest { Id = id });
                 var res = await _dptRrepository.GetAllDepartment();
 
                 ViewBag.Departments = res;
@@ -135,16 +146,17 @@ namespace EMSWebApp.Controllers
         }
 
         [Route("Account/UpdateEmployeesRecord/{id}")]
-        public async Task<IActionResult> UpdateEmployeesRecord(EmployeeInformation employee, [FromForm] IFormFile image, int id)
+        public async Task<IActionResult> UpdateEmployeesRecord(UpdateEmployeeRequest request, EmployeeInformation employee, [FromForm] IFormFile image, int id)
         {
             try
             {
                 await _image.UploadImageByUser(employee, image);
 
-                employee.ModifiedBy = _userManager.GetUserId(User);
-                employee.ModifiedOn = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+                request.ModifiedBy = _userManager.GetUserId(User);
+                request.ModifiedOn = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+                request.ImagePath = employee.ImagePath;
 
-                var result = await _repository.UpdateEmplyeesRecord(employee, id);
+                var result = await _mediator.Send(request);
                 return RedirectToAction("GetAllEmployees");
             }
             catch (Exception ex)
@@ -159,7 +171,7 @@ namespace EMSWebApp.Controllers
         {
             try
             {
-                var result = await _repository.DeleteEmployeesRecord(id);
+                var result = await _mediator.Send(new DeleteEmployeesRequest {Id = id });
                 return RedirectToAction("GetAllEmployees");
             }
             catch (Exception ex)
@@ -262,10 +274,10 @@ namespace EMSWebApp.Controllers
         }
 
 
-        public async Task<IActionResult> GetEmployeeByDepartmentId(int deprtmentId)
-        {
-           var result =   await _repository.GetEmployeeByDepartmentId(deprtmentId);
-            return Json(result);  
-        }
+        //public async Task<IActionResult> GetEmployeeByDepartmentId(int deprtmentId)
+        //{
+        //   var result =   await _repository.GetEmployeeByDepartmentId(deprtmentId);
+        //    return Json(result);  
+        //}
     }
 }

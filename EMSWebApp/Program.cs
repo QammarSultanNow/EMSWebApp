@@ -24,6 +24,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Hangfire;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 
 namespace EMSWebApp
@@ -38,6 +39,7 @@ namespace EMSWebApp
             builder.Services.RegisterApplicationCoreServices();
             builder.Services.RegisterInfrastructureServices();
             builder.Services.AddScoped<IEmailSender, EmailVerificationService>();
+            builder.Services.AddScoped<EmailVerificationService>();
 
 
             // Add services to the container.
@@ -47,8 +49,8 @@ namespace EMSWebApp
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             // add hangfire
-            builder.Services.AddHangfire(config =>
-              config.UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection")));
+            builder.Services.AddHangfire(x => x.UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection")));
+
 
 
             Log.Logger = new LoggerConfiguration()
@@ -78,11 +80,6 @@ namespace EMSWebApp
 
             //builder.Logging.AddSerilog(Log.Logger);
             Log.Information("SERILOG IS WORKING FINE");
-
-
-
-
-
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options =>
             {
@@ -132,6 +129,7 @@ namespace EMSWebApp
 
             app.UseRequestLocalization();
 
+        
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -157,7 +155,10 @@ namespace EMSWebApp
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
 
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard("/myDashboard");
+            app.UseHangfireServer();
+
+           
 
             app.Run();
         }

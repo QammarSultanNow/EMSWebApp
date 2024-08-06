@@ -29,7 +29,7 @@ namespace Infrastructure.Repositories
             return false;
         }
 
-        public async Task<IEnumerable<EmployeeViewModel>> GetAllEmployee(string userId, int id )
+        public async Task<IEnumerable<EmployeeViewModel>> GetAllEmployee(string userId, int id)
         {
             IQueryable<EmployeeInformation> employee;
             if (userId != null)
@@ -88,21 +88,7 @@ namespace Infrastructure.Repositories
             {
                 throw new Exception("");
             }
-
-            if (employee.ImagePath == null)
-            {
-                result.Name = employee.Name;
-                result.Email = employee.Email;
-                result.Adress = employee.Adress;
-                result.Designation = employee.Designation;
-                result.DepartmentId = employee.DepartmentId;
-                result.ContactNo = employee.ContactNo;
-                result.ModifiedOn = employee.ModifiedOn;
-                result.ModifiedBy = employee.ModifiedBy;
-
-            }
-            else
-            {
+              
                 result.Name = employee.Name;
                 result.Email = employee.Email;
                 result.Adress = employee.Adress;
@@ -110,8 +96,11 @@ namespace Infrastructure.Repositories
                 result.ModifiedOn = employee.ModifiedOn;
                 result.ModifiedBy = employee.ModifiedBy;
                 result.ContactNo = employee.ContactNo;
-                result.ImagePath = employee.ImagePath;
-            }
+            
+             if (employee.ImagePath != null)
+                {
+                    result.ImagePath = employee.ImagePath;
+                }
 
 
             await _context.SaveChangesAsync();
