@@ -76,7 +76,6 @@ namespace Infrastructure.Repositories
             result.Name = assets.Name;
             result.Description = assets.Description;
             result.PurchasingPrice = assets.PurchasingPrice;
-            //result.Status = assets.Status;
             if (assets.ImagePath != null)
             {
                 result.ImagePath = assets.ImagePath;

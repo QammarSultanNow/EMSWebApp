@@ -3,6 +3,7 @@ using ApplicationCore.Models;
 using ApplicationCore.UseCases.Departments.CreateDepartment;
 using ApplicationCore.UseCases.Departments.DeleteDepartment;
 using ApplicationCore.UseCases.Departments.GetDepartment;
+using ApplicationCore.UseCases.Departments.GetDepartmentById;
 using ApplicationCore.UseCases.Departments.UpdateDepartment;
 using EMSWebApp.Interface;
 using MediatR;
@@ -15,14 +16,13 @@ namespace EMSWebApp.Controllers
     [Authorize]
     public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepository _repository;
+        private readonly IMediator _mediator;
+
         private readonly IExportEmployeeExcelSheet _exportEmployeeExcel;
         private readonly ILogger<DepartmentController> _logger;
 
-        private readonly IMediator _mediator;
         public DepartmentController(IDepartmentRepository repository, IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<DepartmentController> logger, IMediator mediator)
         {
-            _repository = repository;
             _exportEmployeeExcel = exportEmployeeExcel;
             _logger = logger;
 
@@ -42,7 +42,7 @@ namespace EMSWebApp.Controllers
 
 
         [Route("Department/AddDepartmentAsync")]
-        public async Task<IActionResult> AddDepartmentAsync(CreateDepartmentRequest request, Department department)
+        public async Task<IActionResult> AddDepartmentAsync(CreateDepartmentRequest request)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace EMSWebApp.Controllers
         {
             try
             {
-                var result = await _repository.GetAllDepartmentById(id);
+                var result = await _mediator.Send(new GetDepartmentByIdRequest {Id = id });
                 return View(result);
             }
             catch (Exception ex)
@@ -106,7 +106,6 @@ namespace EMSWebApp.Controllers
             try
             {
                 var result = await _mediator.Send(new DeleteDepartmentRequest { Id = id });
-                //var result = await _repository.DeleteDepartment(id);
                 return RedirectToAction("DeparmentsData");
             }
             catch (Exception ex)

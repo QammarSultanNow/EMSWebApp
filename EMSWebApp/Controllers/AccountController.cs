@@ -16,6 +16,7 @@ using ApplicationCore.UseCases.Employees.CreateEmployee;
 using ApplicationCore.UseCases.Employees.UpdateEmployees;
 using ApplicationCore.UseCases.Employees.DeleteEmployees;
 using ApplicationCore.UseCases.Employees.GetEmployeesById;
+using ApplicationCore.UseCases.Departments.GetDepartment;
 
 
 
@@ -27,7 +28,7 @@ namespace EMSWebApp.Controllers
     public class AccountController : Controller
     {
        // private readonly IEmployeeRepository _repository;
-        private readonly IDepartmentRepository _dptRrepository;
+      //  private readonly IDepartmentRepository _dptRrepository;
         private readonly IUploadImageService _image;
         private readonly IExportEmployeeExcelSheet _exportEmployeeExcel;
         private readonly UserManager<IdentityUser> _userManager;
@@ -39,7 +40,7 @@ namespace EMSWebApp.Controllers
         public AccountController(IEmployeeRepository repository, IDepartmentRepository dptRrepository, UserManager<IdentityUser> userManager, IUploadImageService image, IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<AccountController> logger, SignInManager<IdentityUser> signInManager, IMediator mediator)
         {
             //_repository = repository;
-            _dptRrepository = dptRrepository;
+           // _dptRrepository = dptRrepository;
             _userManager = userManager;
             _image = image;
             _exportEmployeeExcel = exportEmployeeExcel;
@@ -59,8 +60,9 @@ namespace EMSWebApp.Controllers
         {
             try
             {
-                var result = await _dptRrepository.GetAllDepartment();
-                return View(result);
+                var departments = await _mediator.Send(new GetDepartmentRequest());
+                //var result = await _dptRrepository.GetAllDepartment();
+                return View(departments);
             }
             catch (Exception ex) 
             {
@@ -99,7 +101,9 @@ namespace EMSWebApp.Controllers
         {
             try
             {
-                var department = await _dptRrepository.GetAllDepartment();
+                var department = await _mediator.Send(new GetDepartmentRequest());
+
+                //var department = await _dptRrepository.GetAllDepartment();
                 ViewBag.Department = department;
                 TempData["SelectedDepartmentId"] = id;
                 ViewBag.SelectedDepartmentId = TempData["SelectedDepartmentId"] as int?;
@@ -134,9 +138,11 @@ namespace EMSWebApp.Controllers
             try
             {
                 var result = await _mediator.Send(new GetEmployeesByIdRequest { Id = id });
-                var res = await _dptRrepository.GetAllDepartment();
 
-                ViewBag.Departments = res;
+                var departments = await _mediator.Send(new GetDepartmentRequest());
+                //var res = await _dptRrepository.GetAllDepartment();
+
+                ViewBag.Departments = departments;
                 return View(result);
             }
             catch (Exception ex)

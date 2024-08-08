@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.AssetsModel;
 using ApplicationCore.Models;
+using ApplicationCore.UseCases.Assets.CreateAssets;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;

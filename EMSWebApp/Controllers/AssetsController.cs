@@ -8,25 +8,38 @@ using Infrastructure.Enum;
 using Infrastructure.Services;
 using EMSWebApp.Interface;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using ApplicationCore.UseCases.Assets.CreateAssets;
+using MediatR;
+using ApplicationCore.UseCases.Assets.GetAssets;
+using ApplicationCore.UseCases.Assets.UpdateAssets;
+using ApplicationCore.UseCases.Assets.DeleteAssets;
+using ApplicationCore.UseCases.Assets.AssignAsset;
+using ApplicationCore.UseCases.Assets.AddAssignedAsset;
+using ApplicationCore.UseCases.Assets.ListAssignedAsset;
+using ApplicationCore.UseCases.Assets.UnassignAssets;
+using ApplicationCore.UseCases.Assets.GetEmployeeOnDptId;
+using ApplicationCore.UseCases.Departments.GetDepartment;
+using ApplicationCore.UseCases.Assets.GetAssestById;
 
 namespace EMSWebApp.Controllers
 {
     [Authorize]
     public class AssetsController : Controller
     {
-        private readonly IAssetsRepository _assetsRepository;
+        private readonly IMediator _mediator;
+
         private readonly IExportEmployeeExcelSheet _exportAseetExcelSheet;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUploadImageService _uploadImageService;
-        private readonly IDepartmentRepository _departmentRepository;
 
-        public AssetsController(IAssetsRepository assetsRepository, UserManager<IdentityUser> userManager, IExportEmployeeExcelSheet exportAseetExcelSheet, IUploadImageService uploadImageService, IDepartmentRepository departmentRepository)
+
+        public AssetsController(IAssetsRepository assetsRepository, UserManager<IdentityUser> userManager, IExportEmployeeExcelSheet exportAseetExcelSheet, IUploadImageService uploadImageService, IDepartmentRepository departmentRepository, IMediator mediator)
         {
-            _assetsRepository = assetsRepository;
+            _mediator = mediator;
+
             _userManager = userManager;
             _exportAseetExcelSheet = exportAseetExcelSheet;
             _uploadImageService = uploadImageService;
-            _departmentRepository = departmentRepository;
         }
         public IActionResult Index()
         {
@@ -41,28 +54,27 @@ namespace EMSWebApp.Controllers
 
         [HttpPost]
         [Route("Assets/AddAssets")]
-        public async Task<IActionResult> AddAssets(Assets assets , [FromForm] IFormFile image)
+        public async Task<IActionResult> AddAssets(CreateAssetsRequst requst,Assets asset, [FromForm] IFormFile image)
         {
-            await _uploadImageService.UploadAssetImage(assets , image);
+            await _uploadImageService.UploadAssetImage(asset, image);
 
-            assets.CreatedAt = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
-            assets.CreatedBy = _userManager.GetUserName(User);
-            assets.Status = EssetEnum.Available.ToString();
+            requst.CreatedAt = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+            requst.CreatedBy = _userManager.GetUserName(User);
+            requst.Status = EssetEnum.Available.ToString();
+            requst.ImagePath = asset.ImagePath;
+         
 
-            var res =  await _assetsRepository.AddAssetsAsync(assets);
-            if(res > 0)
-            {
-               return RedirectToAction("GetAssetRecords");
-            }
-
-            throw new Exception("Record not added");
+            var res =  await _mediator.Send(requst);
+           
+            return RedirectToAction("GetAssetRecords");
+            
         }
 
         public async Task<IActionResult> GetAssetRecords()
         {
             try
             {
-                var result = await _assetsRepository.GetAssetRecords();
+                var result = await _mediator.Send(new GetAssetsRequest());
                 if (result == null)
                 {
                     throw new Exception();
@@ -80,21 +92,21 @@ namespace EMSWebApp.Controllers
 
         public async Task<IActionResult> GetAssetsRecordById(int id)
         {
-            var result = await _assetsRepository.GetAssetsRecordById(id);
+            var result = await _mediator.Send(new GetAssestByIdRequest() { Id= id}) ;
             return View(result);
         }
 
         [HttpPost]
         [Route("Assets/UpdateAssetsRecords")]
-        public async Task<IActionResult> UpdateAssetsRecords(Assets assets , [FromForm] IFormFile image)
+        public async Task<IActionResult> UpdateAssetsRecords(UpdateAssetsRequest requst, Assets asset, [FromForm] IFormFile image)
         {
-            assets.ModifiedAt = DateTime.Now;
-            assets.ModifiedBy = _userManager.GetUserId(User);
+            requst.ModifiedAt = DateTime.Now;
+            requst.ModifiedBy = _userManager.GetUserId(User);
+            await _uploadImageService.UploadAssetImage(asset, image);
+            requst.ImagePath = asset.ImagePath;
 
-            await _uploadImageService.UploadAssetImage(assets, image);
 
-
-            var result = await _assetsRepository.UpdateAssetsRecords(assets);
+           var result = await _mediator.Send(requst);
             return RedirectToAction("GetAssetRecords");
         }
 
@@ -102,7 +114,8 @@ namespace EMSWebApp.Controllers
         [Route("Assets/DeleteAssetsRecords/{id}")]
         public async Task<IActionResult> DeleteAssetsRecords(int id)
         {
-            var result = await _assetsRepository.DeleteAssetsRecords(id);
+            var result = await _mediator.Send(new DeleteAssetsRequest() { Id = id});
+
             if (result > 0)
             {
                 return RedirectToAction("GetAssetRecords");
@@ -113,8 +126,8 @@ namespace EMSWebApp.Controllers
 
         public async Task<IActionResult> AssignAssets(int id)
         {
-            var result = await _assetsRepository.EmployeeAssetList(id);
-            var dptData =  await _departmentRepository.GetAllDepartment();
+            var result = await _mediator.Send(new AssignAssetRequest() { Id = id}) ;
+            var dptData =  await _mediator.Send(new GetDepartmentRequest());
             ViewBag.Department = dptData;
 
             return View(result);
@@ -122,9 +135,9 @@ namespace EMSWebApp.Controllers
 
         [HttpPost]
         [Route("Assets/AssignAssets")]
-        public async Task<IActionResult> AssignAssets(EmployeeAssets employeeAssets)
+        public async Task<IActionResult> AssignAssets(AddAssignedAssetRequest request )
         {
-            var result = await _assetsRepository.AssignEmployeeAsset(employeeAssets);
+            var result = await _mediator.Send(request);
             if (result > 0)
             {
                 return RedirectToAction("GetAssetRecords");
@@ -135,15 +148,25 @@ namespace EMSWebApp.Controllers
         public async Task<IActionResult> ListAssestWithEmployee(int id)
         {
 
-            var result = await _assetsRepository.ListAssetandEmployee(id);
+            var result = await _mediator.Send(new ListAssignedAssetRequest() { Id = id}) ;
             return View(result);
         }
 
         public async Task<IActionResult> UnassignAsset(int id)
         {
 
-            var result = await _assetsRepository.UnassignedAssetRepo(id);
+            var result = await _mediator.Send(new UnassignAssetRequest() { Id = id}) ;
             return RedirectToAction("GetAssetRecords");
+        }
+
+
+        [HttpGet]
+        [Route("Assets/GetEmployeeListOnDepartmentId")]
+        public async Task<IActionResult> GetEmployeeListOnDepartmentId(int departmentId)
+        {
+          var result =  await _mediator.Send(new GetEmployeeOnDptIdRequest() { Id = departmentId }) ;
+          var employeeList = new SelectList(result, "Id" , "Name");
+          return View(employeeList);
         }
 
 
@@ -155,17 +178,6 @@ namespace EMSWebApp.Controllers
             var fileName = "Employees.xlsx";
 
             return File(excelSheet, contentType, fileName);
-        }
-
-
-
-        [HttpGet]
-        [Route("Assets/GetEmployeeListOnDepartmentId")]
-        public async Task<IActionResult> GetEmployeeListOnDepartmentId(int departmentId)
-        {
-          var result =  await _assetsRepository.GetEmployeeListOnDepartmentIdRepo(departmentId);
-          var employeeList = new SelectList(result, "Id" , "Name");
-          return View(employeeList);
         }
     }
 }

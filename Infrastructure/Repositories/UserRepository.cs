@@ -34,13 +34,12 @@ namespace Infrastructure.Repositories
         public async Task<string> UpdateUser(IdentityUser identityUser)
         {
             var user = await _userManager.FindByIdAsync(identityUser.Id);
-           
+            
                 user.UserName = identityUser.UserName;
                 user.Email = identityUser.Email;
            
 
                 await _userManager.UpdateAsync(user);
-
                 return user.Id;
         }
 
@@ -62,7 +61,7 @@ namespace Infrastructure.Repositories
                     return null;
                 }
 
-                DateTimeOffset? LockUserDate = DateTime.UtcNow.AddYears(2);
+                DateTimeOffset? LockUserDate = DateTime.UtcNow.AddYears(1);
                 var res = await _userManager.SetLockoutEndDateAsync(user, LockUserDate);
                 await _userManager.SetLockoutEnabledAsync(user, true);
                 await _userManager.UpdateAsync(user);
