@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Models;
+using AutoMapper;
 using EMSWebApp.Interface;
 using MediatR;
 using System;
@@ -13,16 +14,17 @@ namespace ApplicationCore.UseCases.Departments.UpdateDepartment
     public class UpdateDepartmentHandler : IRequestHandler<UpdateDepartmentRequest, int>
     {
         private readonly IDepartmentRepository _departmentRepository;
-        public UpdateDepartmentHandler(IDepartmentRepository departmentRepository)
+        private readonly IMapper _mapper;
+        public UpdateDepartmentHandler(IDepartmentRepository departmentRepository, IMapper mapper)
         {
             _departmentRepository = departmentRepository;
+            _mapper = mapper;
         }
         public async Task<int> Handle(UpdateDepartmentRequest request, CancellationToken cancellationToken)
         {
-            Department dpt = new Department();
-            dpt.DepartmentName = request.DepartmentName;
+          var department =   _mapper.Map<Department>(request);
 
-           var result = await _departmentRepository.UpdateDepartment(dpt, request.Id);
+           var result = await _departmentRepository.UpdateDepartment(department, request.Id);
             return result;
         }
     }

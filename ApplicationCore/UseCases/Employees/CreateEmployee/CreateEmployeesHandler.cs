@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Interfaces;
 using ApplicationCore.Models;
+using AutoMapper;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -12,25 +13,15 @@ namespace ApplicationCore.UseCases.Employees.CreateEmployee
     public class CreateEmployeesHandler : IRequestHandler<CreateEmployeesRequest, int>
     {
         private readonly IEmployeeRepository _employeeRepository;
-        public CreateEmployeesHandler(IEmployeeRepository employeeRepository)
+        private readonly IMapper _mapper;
+        public CreateEmployeesHandler(IEmployeeRepository employeeRepository, IMapper mapper)
         {
             _employeeRepository = employeeRepository;
+            _mapper = mapper;
         }
         public async Task<int> Handle(CreateEmployeesRequest request, CancellationToken cancellationToken)
         {
-            EmployeeInformation employee = new EmployeeInformation();
-
-            employee.Name = request.Name;
-            employee.Email = request.Email;
-            employee.Adress = request.Adress;
-            employee.Designation = request.Designation;
-            employee.ContactNo = request.ContactNo;
-            employee.ImagePath = request.ImagePath;
-            employee.CreatedOn = request.CreatedOn;
-            employee.CreatedBy = request.CreatedBy;
-            employee.ModifiedOn = request.ModifiedOn;
-            employee.ModifiedBy = request.ModifiedBy;
-            employee.DepartmentId = request.DepartmentId;
+           var employee =  _mapper.Map<EmployeeInformation>(request);
 
            var result = await _employeeRepository.AddEmplyee(employee);
             return request.Id;

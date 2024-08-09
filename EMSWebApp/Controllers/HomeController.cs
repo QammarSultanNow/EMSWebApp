@@ -13,20 +13,20 @@ namespace EMSWebApp.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ILogger<HomeController> _logger;
-      //  private readonly IDepartmentRepository _departmentRepository;
-      //  private readonly IEmployeeRepository _employeeRepository;
+     
 
         public HomeController(ILogger<HomeController> logger, IDepartmentRepository departmentRepository, IEmployeeRepository employeeRepository, IStringLocalizer<HomeController> localizer, IMediator mediator)
         {
             _mediator = mediator;
             _logger = logger;
-          //  _departmentRepository = departmentRepository;
-          //  _employeeRepository = employeeRepository;
+          
         }
 
         public IActionResult Index()
         {
-          
+            var selectedLanguage = Request.Query["ui-culture"].ToString();
+            ViewBag.SelectedLanguage = string.IsNullOrEmpty(selectedLanguage) ? "" : selectedLanguage;
+            return View();
 
             return View();
         }

@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Interfaces;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -12,17 +13,18 @@ namespace ApplicationCore.UseCases.Users.UpdateUser
     public class UpdateUserHandler : IRequestHandler<UpdateUserRequest, string>
     {
         private readonly IUserRepository _userRepository;
-        public UpdateUserHandler(IUserRepository userRepository)
+        private readonly IMapper _mapper;
+        public UpdateUserHandler(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         public async Task<string> Handle(UpdateUserRequest request, CancellationToken cancellationToken)
         {
-            IdentityUser user = new IdentityUser();
-            user.Id = request.Id;
-            user.UserName = request.UserName;
-            user.Email = request.Email;
+
+            var user = _mapper.Map<IdentityUser>(request);
+
             var result = await _userRepository.UpdateUser(user);
             return result;
         }

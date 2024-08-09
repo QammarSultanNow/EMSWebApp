@@ -21,7 +21,7 @@ namespace EMSWebApp.Controllers
         private readonly IExportEmployeeExcelSheet _exportEmployeeExcel;
         private readonly ILogger<DepartmentController> _logger;
 
-        public DepartmentController(IDepartmentRepository repository, IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<DepartmentController> logger, IMediator mediator)
+        public DepartmentController(IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<DepartmentController> logger, IMediator mediator)
         {
             _exportEmployeeExcel = exportEmployeeExcel;
             _logger = logger;

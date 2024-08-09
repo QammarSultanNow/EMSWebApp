@@ -27,8 +27,7 @@ namespace EMSWebApp.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-       // private readonly IEmployeeRepository _repository;
-      //  private readonly IDepartmentRepository _dptRrepository;
+      
         private readonly IUploadImageService _image;
         private readonly IExportEmployeeExcelSheet _exportEmployeeExcel;
         private readonly UserManager<IdentityUser> _userManager;
@@ -37,10 +36,9 @@ namespace EMSWebApp.Controllers
         private readonly IMediator _mediator;
         private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IEmployeeRepository repository, IDepartmentRepository dptRrepository, UserManager<IdentityUser> userManager, IUploadImageService image, IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<AccountController> logger, SignInManager<IdentityUser> signInManager, IMediator mediator)
+        public AccountController(UserManager<IdentityUser> userManager, IUploadImageService image, IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<AccountController> logger, SignInManager<IdentityUser> signInManager, IMediator mediator)
         {
-            //_repository = repository;
-           // _dptRrepository = dptRrepository;
+            
             _userManager = userManager;
             _image = image;
             _exportEmployeeExcel = exportEmployeeExcel;

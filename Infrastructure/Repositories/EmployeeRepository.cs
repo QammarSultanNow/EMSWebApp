@@ -96,6 +96,7 @@ namespace Infrastructure.Repositories
                 result.ModifiedOn = employee.ModifiedOn;
                 result.ModifiedBy = employee.ModifiedBy;
                 result.ContactNo = employee.ContactNo;
+                result.DepartmentId = employee.DepartmentId;
             
              if (employee.ImagePath != null)
                 {

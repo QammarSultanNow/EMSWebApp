@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using ApplicationCore.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,12 @@ namespace ApplicationCore
     {
         public static void RegisterApplicationCoreServices(this IServiceCollection services)
         {
+            //Add AutoMapper
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             // Add Mediator
             services.AddMediatR(conf => conf.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
            
-
-
-
         }
     }
 }

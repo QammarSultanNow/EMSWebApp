@@ -1,7 +1,8 @@
 ﻿
+
 <html lang="en">
 <head>
-
+   
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -41,6 +42,11 @@
    
 
 <style type="text/css">/* Chart.js */
+       
+    .default-option {
+            color: gray;
+        }
+  
 keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-render-monitor{animation:chartjs-render-animation 1ms}.chartjs-size-monitor,.chartjs-size-monitor-expand,.chartjs-size-monitor-shrink{position:absolute;direction:ltr;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1}.chartjs-size-monitor-expand>div{position:absolute;width:1000000px;height:1000000px;left:0;top:0}.chartjs-size-monitor-shrink>div{position:absolute;width:200%;height:200%;left:0;top:0}
 </style>
 
@@ -149,8 +155,7 @@ keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-rende
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Users Info:</h6>
                         <a class="collapse-item" href="/Users/GetUsers">Users Data</a>
-                        <a class="collapse-item" href=""></a>
-                        <a class="collapse-item" href=""></a>
+                       
                     </div>
                 </div>
             </li>
@@ -180,7 +185,7 @@ keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-rende
                     </button>
 
                     <!-- Topbar Search -->
-                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                  @*   <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
@@ -189,7 +194,29 @@ keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-rende
                                 </button>
                             </div>
                         </div>
-                    </form>
+                    </form> *@
+
+                    <!-- Select Language -->
+                    <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+
+                        <select id="languageSelect" onchange="changeLanguage(this)" class="custom-select w-auto mb-2" aria-label="Default select example" name="Language">
+
+                           @*  @if (ViewBag.SelectedLanguage == "")
+                            { *@
+                                <option id="chooseLanguage" value="" class="default-option">Choose a language</option>
+                                <option value="en-US">English</option>
+                                <option value="ur-PK">Urdu</option>
+                           @*  }
+                            else
+                            {
+                                <option value="en-US">English</option>
+                                <option value="ur-PK">Urdu</option>
+                            } *@
+                           
+
+                        </select>
+                    </div>
+                   
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -274,4 +301,27 @@ keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-rende
 </body>
 </html>
 
+<script>
+    $(document).ready(function () {
 
+        changeLanguage();
+
+    })
+
+    function changeLanguage(select) {
+
+        var selectedLanguage = document.getElementById("languageSelect").value;
+        if (selectedLanguage) {
+
+            var currentUrl = window.location.href;
+            var newUrl = new URL(currentUrl);
+            newUrl.searchParams.set("ui-culture", selectedLanguage);
+            window.location.href = newUrl.toString();
+            
+        }
+       
+             
+    }
+
+
+</script>

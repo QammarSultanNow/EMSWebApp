@@ -29,15 +29,15 @@ namespace EMSWebApp.Controllers
         private readonly IMediator _mediator;
 
         private readonly IExportEmployeeExcelSheet _exportAseetExcelSheet;
-        private readonly UserManager<IdentityUser> _userManager;
+       // private readonly UserManager<IdentityUser> _userManager;
         private readonly IUploadImageService _uploadImageService;
 
 
-        public AssetsController(IAssetsRepository assetsRepository, UserManager<IdentityUser> userManager, IExportEmployeeExcelSheet exportAseetExcelSheet, IUploadImageService uploadImageService, IDepartmentRepository departmentRepository, IMediator mediator)
+        public AssetsController( UserManager<IdentityUser> userManager, IExportEmployeeExcelSheet exportAseetExcelSheet, IUploadImageService uploadImageService, IDepartmentRepository departmentRepository, IMediator mediator)
         {
             _mediator = mediator;
 
-            _userManager = userManager;
+          //  _userManager = userManager;
             _exportAseetExcelSheet = exportAseetExcelSheet;
             _uploadImageService = uploadImageService;
         }
@@ -54,18 +54,17 @@ namespace EMSWebApp.Controllers
 
         [HttpPost]
         [Route("Assets/AddAssets")]
-        public async Task<IActionResult> AddAssets(CreateAssetsRequst requst,Assets asset, [FromForm] IFormFile image)
+        public async Task<IActionResult> AddAssets(CreateAssetsRequst requst, Assets asset, [FromForm] IFormFile image)
         {
             await _uploadImageService.UploadAssetImage(asset, image);
 
             requst.CreatedAt = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
-            requst.CreatedBy = _userManager.GetUserName(User);
+           // requst.CreatedBy = _userManager.GetUserName(User);
             requst.Status = EssetEnum.Available.ToString();
             requst.ImagePath = asset.ImagePath;
          
 
             var res =  await _mediator.Send(requst);
-           
             return RedirectToAction("GetAssetRecords");
             
         }
@@ -101,7 +100,7 @@ namespace EMSWebApp.Controllers
         public async Task<IActionResult> UpdateAssetsRecords(UpdateAssetsRequest requst, Assets asset, [FromForm] IFormFile image)
         {
             requst.ModifiedAt = DateTime.Now;
-            requst.ModifiedBy = _userManager.GetUserId(User);
+            //requst.ModifiedBy = _userManager.GetUserId(User);
             await _uploadImageService.UploadAssetImage(asset, image);
             requst.ImagePath = asset.ImagePath;
 

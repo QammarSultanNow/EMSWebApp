@@ -18,7 +18,7 @@ namespace EMSWebApp.Controllers
      
         private readonly IMediator _mediator;
 
-        public UsersController(IUserRepository userRepository, IMediator mediator)
+        public UsersController(IMediator mediator)
         {
             _mediator = mediator;
         }

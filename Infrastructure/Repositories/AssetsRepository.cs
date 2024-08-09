@@ -3,10 +3,14 @@ using ApplicationCore.Data;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Models;
 using Infrastructure.Enum;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,12 +19,20 @@ namespace Infrastructure.Repositories
     public class AssetsRepository : IAssetsRepository
     {
         private readonly ApplicationDbContext _context;
-        public AssetsRepository(ApplicationDbContext context)
+        private readonly UserManager<IdentityUser> _userManager;
+        private IHttpContextAccessor _httpContextAccessor;
+        public AssetsRepository(ApplicationDbContext context, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<int> AddAssetsAsync(Assets assets)
         {
+            var user = _httpContextAccessor.HttpContext?.User;
+            assets.CreatedBy =  _userManager.GetUserName(user);
+
+
             await _context.tblAssets.AddAsync(assets);
             await _context.SaveChangesAsync();
             return assets.Id;
@@ -72,7 +84,6 @@ namespace Infrastructure.Repositories
         public async Task<int> UpdateAssetsRecords(Assets assets)
         {
             var result = await _context.tblAssets.Where(x => x.Id == assets.Id).FirstOrDefaultAsync();
-
             result.Name = assets.Name;
             result.Description = assets.Description;
             result.PurchasingPrice = assets.PurchasingPrice;
@@ -80,6 +91,11 @@ namespace Infrastructure.Repositories
             {
                 result.ImagePath = assets.ImagePath;
             }
+
+            var user = _httpContextAccessor.HttpContext?.User;
+            assets.ModifiedBy = _userManager.GetUserId(user);
+            result.ModifiedBy = assets.ModifiedBy;
+
             _context.tblAssets.Update(result);
             await _context.SaveChangesAsync();
             return result.Id;
