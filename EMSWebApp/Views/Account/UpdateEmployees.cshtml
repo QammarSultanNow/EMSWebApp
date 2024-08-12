@@ -43,8 +43,8 @@
 
                 <div class="mb-3">
 
-                    <select class="form-control" name="DepartmentId" id="">
-                        <option value="">@Model.Department.DepartmentName</option>
+                    <select class="form-control" name="DepartmentId">
+                        <option value="@Model.Department.Id">@Model.Department.DepartmentName</option>
                         @foreach (var i in @ViewBag.Departments)
                         {
                             <option value="@i.Id">@i.DepartmentName</option>

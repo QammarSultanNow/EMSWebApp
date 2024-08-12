@@ -20,6 +20,7 @@ using ApplicationCore.UseCases.Assets.UnassignAssets;
 using ApplicationCore.UseCases.Assets.GetEmployeeOnDptId;
 using ApplicationCore.UseCases.Departments.GetDepartment;
 using ApplicationCore.UseCases.Assets.GetAssestById;
+using ApplicationCore.UseCases.Assets.ExportExcelSheet;
 
 namespace EMSWebApp.Controllers
 {
@@ -27,25 +28,14 @@ namespace EMSWebApp.Controllers
     public class AssetsController : Controller
     {
         private readonly IMediator _mediator;
-
-        private readonly IExportEmployeeExcelSheet _exportAseetExcelSheet;
-       // private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUploadImageService _uploadImageService;
-
-
-        public AssetsController( UserManager<IdentityUser> userManager, IExportEmployeeExcelSheet exportAseetExcelSheet, IUploadImageService uploadImageService, IDepartmentRepository departmentRepository, IMediator mediator)
+        public AssetsController(IExportEmployeeExcelSheet exportAseetExcelSheet, IUploadImageService uploadImageService, IDepartmentRepository departmentRepository, IMediator mediator)
         {
             _mediator = mediator;
-
-          //  _userManager = userManager;
-            _exportAseetExcelSheet = exportAseetExcelSheet;
-            _uploadImageService = uploadImageService;
         }
         public IActionResult Index()
         {
             return View();
         }
-
 
         public IActionResult AddAssets()
         {
@@ -54,15 +44,11 @@ namespace EMSWebApp.Controllers
 
         [HttpPost]
         [Route("Assets/AddAssets")]
-        public async Task<IActionResult> AddAssets(CreateAssetsRequst requst, Assets asset, [FromForm] IFormFile image)
+        public async Task<IActionResult> AddAssets(CreateAssetsRequst requst)
         {
-            await _uploadImageService.UploadAssetImage(asset, image);
-
+        
             requst.CreatedAt = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
-           // requst.CreatedBy = _userManager.GetUserName(User);
             requst.Status = EssetEnum.Available.ToString();
-            requst.ImagePath = asset.ImagePath;
-         
 
             var res =  await _mediator.Send(requst);
             return RedirectToAction("GetAssetRecords");
@@ -85,9 +71,7 @@ namespace EMSWebApp.Controllers
             {
                 throw new Exception(ex.Message);
             }
-
         }
-
 
         public async Task<IActionResult> GetAssetsRecordById(int id)
         {
@@ -100,8 +84,6 @@ namespace EMSWebApp.Controllers
         public async Task<IActionResult> UpdateAssetsRecords(UpdateAssetsRequest requst, Assets asset, [FromForm] IFormFile image)
         {
             requst.ModifiedAt = DateTime.Now;
-            //requst.ModifiedBy = _userManager.GetUserId(User);
-            await _uploadImageService.UploadAssetImage(asset, image);
             requst.ImagePath = asset.ImagePath;
 
 
@@ -146,14 +128,12 @@ namespace EMSWebApp.Controllers
 
         public async Task<IActionResult> ListAssestWithEmployee(int id)
         {
-
             var result = await _mediator.Send(new ListAssignedAssetRequest() { Id = id}) ;
             return View(result);
         }
 
         public async Task<IActionResult> UnassignAsset(int id)
         {
-
             var result = await _mediator.Send(new UnassignAssetRequest() { Id = id}) ;
             return RedirectToAction("GetAssetRecords");
         }
@@ -172,11 +152,11 @@ namespace EMSWebApp.Controllers
         [Route("Assets/AssetExcelSheet")]
         public async Task<IActionResult> AssetExcelSheet()
         {
-            byte[] excelSheet = await _exportAseetExcelSheet.DownloadDAssetExcelSheet();
-            var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            var fileName = "Employees.xlsx";
+           var result = await _mediator.Send(new ExportExcelSheetRequest());
+           var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+           var fileName = "Employees.xlsx";
 
-            return File(excelSheet, contentType, fileName);
+            return File(result, contentType, fileName);
         }
     }
 }

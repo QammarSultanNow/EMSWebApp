@@ -19,20 +19,13 @@ namespace Infrastructure.Repositories
     public class AssetsRepository : IAssetsRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
-        private IHttpContextAccessor _httpContextAccessor;
-        public AssetsRepository(ApplicationDbContext context, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor)
+
+        public AssetsRepository(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
-            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<int> AddAssetsAsync(Assets assets)
         {
-            var user = _httpContextAccessor.HttpContext?.User;
-            assets.CreatedBy =  _userManager.GetUserName(user);
-
-
             await _context.tblAssets.AddAsync(assets);
             await _context.SaveChangesAsync();
             return assets.Id;
@@ -92,8 +85,7 @@ namespace Infrastructure.Repositories
                 result.ImagePath = assets.ImagePath;
             }
 
-            var user = _httpContextAccessor.HttpContext?.User;
-            assets.ModifiedBy = _userManager.GetUserId(user);
+            
             result.ModifiedBy = assets.ModifiedBy;
 
             _context.tblAssets.Update(result);
@@ -110,8 +102,7 @@ namespace Infrastructure.Repositories
                {
                    var res =   await _context.tblEmployeeAssets.Where(x => x.AssetId == id).FirstOrDefaultAsync();
                     _context.tblEmployeeAssets.Remove(res);
-                    
-                }
+               }
 
                 _context.tblAssets.Remove(result);
                 await _context.SaveChangesAsync();

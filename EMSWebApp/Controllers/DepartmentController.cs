@@ -2,6 +2,7 @@
 using ApplicationCore.Models;
 using ApplicationCore.UseCases.Departments.CreateDepartment;
 using ApplicationCore.UseCases.Departments.DeleteDepartment;
+using ApplicationCore.UseCases.Departments.ExportExcelSheetDepartment;
 using ApplicationCore.UseCases.Departments.GetDepartment;
 using ApplicationCore.UseCases.Departments.GetDepartmentById;
 using ApplicationCore.UseCases.Departments.UpdateDepartment;
@@ -18,15 +19,10 @@ namespace EMSWebApp.Controllers
     {
         private readonly IMediator _mediator;
 
-        private readonly IExportEmployeeExcelSheet _exportEmployeeExcel;
-        private readonly ILogger<DepartmentController> _logger;
-
-        public DepartmentController(IExportEmployeeExcelSheet exportEmployeeExcel, ILogger<DepartmentController> logger, IMediator mediator)
+        public DepartmentController(IMediator mediator)
         {
-            _exportEmployeeExcel = exportEmployeeExcel;
-            _logger = logger;
-
             _mediator = mediator;
+
         }
         //public IActionResult Index()
         //{
@@ -119,7 +115,7 @@ namespace EMSWebApp.Controllers
         [Route("Department/ExportEmployeeExcelSheet")]
         public async Task<IActionResult> ExportEmployeeExcelSheet(string userId, int id)
         {
-            byte[] excelSheet = await _exportEmployeeExcel.DownloadDepartmentExcelSheet();
+            byte[] excelSheet = await _mediator.Send(new ExportExcelSheetDepartmentRequest());
             var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             var fileName = "Departments.xlsx";
 

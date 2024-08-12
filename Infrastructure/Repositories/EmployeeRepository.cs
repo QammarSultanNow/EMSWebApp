@@ -20,13 +20,20 @@ namespace Infrastructure.Repositories
         public async Task<bool> AddEmplyee(EmployeeInformation employee)
         {
 
-            var results = await _context.EmployeeInformationtbl.AddAsync(employee);
-            await _context.SaveChangesAsync();
-            if (results != null)
+            try
             {
-                return true;
+                var results = await _context.EmployeeInformationtbl.AddAsync(employee);
+                await _context.SaveChangesAsync();
+                if (results != null)
+                {
+                    return true;
+                }
+                return false;
             }
-            return false;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<IEnumerable<EmployeeViewModel>> GetAllEmployee(string userId, int id)
@@ -83,12 +90,14 @@ namespace Infrastructure.Repositories
 
         public async Task<int> UpdateEmplyeesRecord(EmployeeInformation employee, int id)
         {
-            var result = await _context.EmployeeInformationtbl.Where(x => x.Id == id).FirstOrDefaultAsync();
-            if (result == null)
+            try
             {
-                throw new Exception("");
-            }
-              
+                var result = await _context.EmployeeInformationtbl.Where(x => x.Id == id).FirstOrDefaultAsync();
+                if (result == null)
+                {
+                    throw new Exception("");
+                }
+
                 result.Name = employee.Name;
                 result.Email = employee.Email;
                 result.Adress = employee.Adress;
@@ -97,27 +106,36 @@ namespace Infrastructure.Repositories
                 result.ModifiedBy = employee.ModifiedBy;
                 result.ContactNo = employee.ContactNo;
                 result.DepartmentId = employee.DepartmentId;
-            
-             if (employee.ImagePath != null)
+                if (employee.ImagePath != null)
                 {
                     result.ImagePath = employee.ImagePath;
                 }
 
 
-            await _context.SaveChangesAsync();
-            return result.Id;
+                await _context.SaveChangesAsync();
+                return result.Id;
+            }
+            catch (Exception ex) {
+                throw new Exception(ex.Message);
+                    }
         }
 
         public async Task<int> DeleteEmployeesRecord(int id)
         {
-            var result = await _context.EmployeeInformationtbl.Where(x => x.Id == id).FirstOrDefaultAsync();
-            if (result == null)
+            try
             {
-                throw new Exception("");
+                var result = await _context.EmployeeInformationtbl.Where(x => x.Id == id).FirstOrDefaultAsync();
+                if (result == null)
+                {
+                    throw new Exception("");
+                }
+                _context.EmployeeInformationtbl.Remove(result);
+                await _context.SaveChangesAsync();
+                return result.Id;
             }
-            _context.EmployeeInformationtbl.Remove(result);
-            await _context.SaveChangesAsync();
-            return result.Id;
+            catch (Exception ex) {
+                throw new Exception(ex.Message);
+            }
 
         }
 

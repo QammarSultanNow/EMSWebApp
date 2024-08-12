@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Http;
 
 namespace ApplicationCore.UseCases.Employees.CreateEmployee
 {
@@ -42,6 +44,8 @@ namespace ApplicationCore.UseCases.Employees.CreateEmployee
 
         [ForeignKey("Department")]
         public int DepartmentId { get; set; }
+
+        public IFormFile Image { get; set; }
     }
 
 

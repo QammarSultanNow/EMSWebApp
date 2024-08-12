@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApplicationCore.AssetsModel
 {
@@ -26,6 +28,9 @@ namespace ApplicationCore.AssetsModel
         public string CreatedBy { get; set; }
         public DateTime? ModifiedAt { get; set; }
         public string? ModifiedBy { get; set; }
+
+        [NotMapped]
+        public  IFormFile Image { get; set; }
 
     }
 }

@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ApplicationCore.AssetsModel;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace ApplicationCore.UseCases.Assets.CreateAssets
 {
@@ -14,16 +16,31 @@ namespace ApplicationCore.UseCases.Assets.CreateAssets
     {
         private readonly IAssetsRepository _assetsRepository;
         private readonly IMapper _mapper;
-        public CreateAssetsHandler(IAssetsRepository assetsRepository, IMapper mapper)
+        private readonly UserManager<IdentityUser> _userManager;
+        private IHttpContextAccessor _httpContextAccessor;
+        private readonly IUploadImageService _uploadImageService;
+
+        public CreateAssetsHandler(IAssetsRepository assetsRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager, IUploadImageService uploadImageService)
         {
             _assetsRepository = assetsRepository;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
+            _uploadImageService = uploadImageService;
         }
+
         public async Task<int> Handle(CreateAssetsRequst request, CancellationToken cancellationToken)
         {
-          var asset =  _mapper.Map<AssetsModel.Assets>(request);
 
-           var result = await _assetsRepository.AddAssetsAsync(asset);
+            await _uploadImageService.UploadAssetImage(request);
+
+
+            var user = _httpContextAccessor.HttpContext?.User;
+            request.CreatedBy = _userManager.GetUserName(user);
+
+            var asset =  _mapper.Map<AssetsModel.Assets>(request);
+
+            var result = await _assetsRepository.AddAssetsAsync(asset);
             return result;
         }
     }

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace ApplicationCore.UseCases.Employees.UpdateEmployees
 {
@@ -40,5 +41,8 @@ namespace ApplicationCore.UseCases.Employees.UpdateEmployees
 
         [ForeignKey("Department")]
         public int DepartmentId { get; set; }
+
+        [NotMapped]
+        public IFormFile Image { get; set; }
     }
 }
