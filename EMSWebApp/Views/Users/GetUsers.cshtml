@@ -63,12 +63,16 @@
                                         {
                                             @if (@i.Id == "4c521f86-0d2a-4cf9-9906-adcc7dca856c")
                                             {
-                                                <td><img class="adminNotLocked" src="~/dummy.png" width="42" height="40" /></td>
+                                                <td class="adminNotLocked">
+                                                    <button class="btn btn-success adminNotLocked">
+                                                            <i class="fas fa-user"></i>
+                                                    </button>
+                                                </td>
                                             }
                                             else
                                             {
                                                 <td>
-                                                    <button class="btn btn-danger">
+                                                    <button id="" class="btn btn-danger">
                                                         <a href="/Users/UnLockUser/@i.Id">
                                                             <i class="fas fa-lock"></i>
                                                         </a>
@@ -81,14 +85,19 @@
                                         {
                                             @if (@i.Id == "4c521f86-0d2a-4cf9-9906-adcc7dca856c")
                                             {
-                                                <td><img class="adminNotLocked" src="~/dummy.png" width="42" height="40"   /></td>
+                                                <td class="adminNotLocked">
+                                                    <button class="btn btn-success adminNotLocked">
+                                                            <i class="adminNotLocked fas fa-user"></i>
+                                                    </button>
+                                                </td>
+                                                
                                             }
                                             else
                                             {
                                                 <td>
                                                     <button class="btn btn-success">
                                                         <a href="/Users/LockUser/@i.Id">
-                                                            <i class="fas fa-unlock"></i>
+                                                            <i class="adminNotLocked fas fa-unlock"></i>
                                                         </a>
                                                     </button>
                                                 </td>
@@ -150,9 +159,28 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
   
+    
 
+    <!-- Modal -->
+    <div class="modal fade" id="adminNotLockedModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning" id="">Waring</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <h2 class="text-danger">Admin never getting locked!!!!!</h2>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 
@@ -160,7 +188,7 @@
 <script>
     $(document).ready(function () {
         $('.adminNotLocked').on('click', function () {
-            alert("Admin could not be locked anyway")
+            $('#adminNotLockedModal').modal('show')
         })
     })
 

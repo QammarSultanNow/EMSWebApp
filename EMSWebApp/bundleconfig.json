@@ -4,7 +4,8 @@
       "outputFileName": "wwwroot/css/site.min.css",
       "inputFiles": [
         "wwwroot/css/site.css",
-        "wwwroot/css/another.css"
+        "wwwroot/css/another.css",
+        "wwwroot/css/sb-admin-2.min.css"
       ],
       "minify": {
         "enabled": true,
