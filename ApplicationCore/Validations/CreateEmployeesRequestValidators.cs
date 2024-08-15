@@ -14,7 +14,7 @@ namespace ApplicationCore.Validations
         {
             RuleFor(x => x.Name).NotNull().NotEmpty()
                 .WithMessage("Name is required")
-                .Length(3, 50).WithMessage("{PropertyName} is between 3 to 10");
+                .Length(3, 50).WithMessage("{PropertyName} is between 3 to 50");
             RuleFor(x => x.Adress).Length(5, 250);
                
             RuleFor(x => x.ContactNo).NotNull().NotEmpty()

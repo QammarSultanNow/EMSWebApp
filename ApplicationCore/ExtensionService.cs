@@ -1,4 +1,7 @@
 ﻿using ApplicationCore.Models;
+using ApplicationCore.UseCases.Assets.UpdateAssets;
+using ApplicationCore.UseCases.Departments.CreateDepartment;
+using ApplicationCore.UseCases.Departments.UpdateDepartment;
 using ApplicationCore.UseCases.Employees.CreateEmployee;
 using ApplicationCore.ValidationBehavior;
 using ApplicationCore.Validations;
@@ -24,7 +27,10 @@ namespace ApplicationCore
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             //Add Fluent Validations
-            services.AddValidatorsFromAssemblyContaining<CreateEmployeesRequestValidators>()                                                                ;
+            services.AddValidatorsFromAssemblyContaining<CreateEmployeesRequestValidators>();
+            services.AddScoped<IValidator<CreateDepartmentRequest>, CreateDepartmentRequestValidators>();
+            services.AddScoped<IValidator<UpdateDepartmentRequest>, UpdateDepartmentRequestValidators>();
+            services.AddScoped<IValidator<UpdateAssetsRequest>, UpdateAssetsRequestValidator>();
 
             // Add Mediator
             services.AddMediatR(conf => conf.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));

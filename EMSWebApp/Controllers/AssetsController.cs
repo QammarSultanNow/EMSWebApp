@@ -31,10 +31,12 @@ namespace EMSWebApp.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAssetsRequst> _validator;
-        public AssetsController(IExportEmployeeExcelSheet exportAseetExcelSheet, IUploadImageService uploadImageService, IDepartmentRepository departmentRepository, IMediator mediator, IValidator<CreateAssetsRequst> validator)
+        private readonly IValidator<UpdateAssetsRequest> _updateValidator;
+        public AssetsController(IExportEmployeeExcelSheet exportAseetExcelSheet, IUploadImageService uploadImageService, IDepartmentRepository departmentRepository, IMediator mediator, IValidator<CreateAssetsRequst> validator, IValidator<UpdateAssetsRequest> updateValidator)
         {
             _mediator = mediator;
             _validator = validator;
+            _updateValidator = updateValidator;
         }
         public IActionResult Index()
         {
@@ -96,10 +98,21 @@ namespace EMSWebApp.Controllers
 
         [HttpPost]
         [Route("Assets/UpdateAssetsRecords")]
-        public async Task<IActionResult> UpdateAssetsRecords(UpdateAssetsRequest requst, Assets asset, [FromForm] IFormFile image)
+        public async Task<IActionResult> GetAssetsRecordById(UpdateAssetsRequest requst)
         {
+            var resultModel = await _mediator.Send(new GetAssestByIdRequest() { Id = requst.Id });
+
+            var validation = await _updateValidator.ValidateAsync(requst);
+            if (!validation.IsValid)
+            {
+                foreach(var item in validation.Errors)
+                {
+                    ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
+                }
+                return View(resultModel);
+            }
             requst.ModifiedAt = DateTime.Now;
-            requst.ImagePath = asset.ImagePath;
+           // requst.ImagePath = asset.ImagePath;
 
 
            var result = await _mediator.Send(requst);

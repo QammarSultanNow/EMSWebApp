@@ -7,18 +7,21 @@
 
         <div class=" shadow p-3 mb-5 bg-white rounded" ; margin : auto">
             <h2>Update Employee Form</h2>
-            <form action="/Account/UpdateEmployeesRecord/@Model?.Id" method="post" enctype="multipart/form-data">
+            <form  method="post" asp-controller="Account" asp-action="UpdateEmployeesRecord" enctype="multipart/form-data">
+
+                <input type="text" hidden name="Id" value="@Model?.Id" class="form-control">
+
 
                 <div class="mb-3">
                     <label for="">Name</label>
-                    <input type="text" name="Name" value="@Model?.Name" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Name">
+                    <input type="text" name="Name" value="@Model?.Name" class="form-control" id="" aria-describedby="" placeholder="Enter Name">
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
 
 
                 <div class="mb-3">
                     <label for="">Email</label>
-                    <input type="email" name="Email" value="@Model?.Email" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Email">
+                    <input type="email" name="Email" value="@Model?.Email" class="form-control" id="" aria-describedby="" placeholder="Enter Email">
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
 

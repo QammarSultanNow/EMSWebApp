@@ -151,12 +151,17 @@ namespace EMSWebApp.Controllers
             }
         }
 
-        [Route("Account/UpdateEmployeesRecord/{id}")]
+        [Route("Account/UpdateEmployeesRecord")]
         public async Task<IActionResult> UpdateEmployees(UpdateEmployeeRequest request)
         {
             try
             {
-               var validation = await _validatorUpdate.ValidateAsync(request);
+                var resultModel = await _mediator.Send(new GetEmployeesByIdRequest { Id = request.Id });
+                var departments = await _mediator.Send(new GetDepartmentRequest());
+                ViewBag.Departments = departments;
+
+
+                var validation = await _validatorUpdate.ValidateAsync(request);
 
                 if (!validation.IsValid)
                 {
@@ -165,7 +170,7 @@ namespace EMSWebApp.Controllers
                         ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
                     }
                    
-                    return View();
+                    return View(resultModel);
                 }
 
                 var result = await _mediator.Send(request);

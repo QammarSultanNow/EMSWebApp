@@ -61,20 +61,39 @@
 
                                         @if (@i.LockoutEnd > DateTimeOffset.UtcNow)
                                         {
-                                            <td><button class="btn btn-danger"> <a href="/Users/UnLockUser/@i.Id">
-                                                        <i class="fas fa-lock"></i>
-                                                    </a>
-                                                </button>
-                                            </td>
+                                            @if (@i.Id == "4c521f86-0d2a-4cf9-9906-adcc7dca856c")
+                                            {
+                                                <td><img class="adminNotLocked" src="~/dummy.png" width="42" height="40" /></td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <button class="btn btn-danger">
+                                                        <a href="/Users/UnLockUser/@i.Id">
+                                                            <i class="fas fa-lock"></i>
+                                                        </a>
+                                                    </button>
+                                                </td>
+                                            }
+                                           
                                         }
                                         else
                                         {
+                                            @if (@i.Id == "4c521f86-0d2a-4cf9-9906-adcc7dca856c")
+                                            {
+                                                <td><img class="adminNotLocked" src="~/dummy.png" width="42" height="40"   /></td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <button class="btn btn-success">
+                                                        <a href="/Users/LockUser/@i.Id">
+                                                            <i class="fas fa-unlock"></i>
+                                                        </a>
+                                                    </button>
+                                                </td>
+                                            }
                                             
-                                           <td><button class="btn btn-success"> <a href="/Users/LockUser/@i.Id">
-                                                        <i class="fas fa-unlock"></i>
-                                                    </a>
-                                                </button>
-                                            </td>
                                         }
                                         
                                      
@@ -138,5 +157,12 @@
 </body>
 
 </html>
+<script>
+    $(document).ready(function () {
+        $('.adminNotLocked').on('click', function () {
+            alert("Admin could not be locked anyway")
+        })
+    })
 
+</script>
 

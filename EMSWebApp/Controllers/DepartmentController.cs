@@ -6,6 +6,7 @@ using ApplicationCore.UseCases.Departments.ExportExcelSheetDepartment;
 using ApplicationCore.UseCases.Departments.GetDepartment;
 using ApplicationCore.UseCases.Departments.GetDepartmentById;
 using ApplicationCore.UseCases.Departments.UpdateDepartment;
+using Azure.Core;
 using EMSWebApp.Interface;
 using FluentValidation;
 using MediatR;
@@ -20,11 +21,13 @@ namespace EMSWebApp.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IValidator<CreateDepartmentRequest> _validator;
+        private readonly IValidator<UpdateDepartmentRequest> _updateDepartmentValidator;
 
-        public DepartmentController(IMediator mediator, IValidator<CreateDepartmentRequest> validator)
+        public DepartmentController(IMediator mediator, IValidator<CreateDepartmentRequest> validator, IValidator<UpdateDepartmentRequest> updateDepartmentValidator)
         {
             _mediator = mediator;
             _validator = validator;
+            _updateDepartmentValidator = updateDepartmentValidator;
         }
         //public IActionResult Index()
         //{
@@ -95,11 +98,24 @@ namespace EMSWebApp.Controllers
             }
         }
 
-        [Route("Department/UpdateDepartmentName/{id}")]
-        public async Task<IActionResult> UpdateDepartmentName(UpdateDepartmentRequest request, Department department, int id)
+        [HttpPost]
+        [Route("Department/UpdateDepartmentName")]
+        public async Task<IActionResult> GetDepartmentById(UpdateDepartmentRequest request)
         {
             try
             {
+                var resultModel = await _mediator.Send(new GetDepartmentByIdRequest { Id = request.Id });
+
+                var validation = await _updateDepartmentValidator.ValidateAsync(request);
+                if (!validation.IsValid)
+                {
+                    foreach(var item in validation.Errors)
+                    {
+                        ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
+                    }
+                    return View(resultModel);
+                }
+
                 var result = await _mediator.Send(request);
                 return RedirectToAction("DeparmentsData");
             }

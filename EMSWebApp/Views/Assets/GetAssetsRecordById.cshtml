@@ -7,31 +7,36 @@
 
             <form method="post" asp-controller="Assets" asp-action="UpdateAssetsRecords" enctype="multipart/form-data">
                 <h2>Edit Asset </h2>
-                <input type="text" class="form-control" hidden id="" aria-describedby="emailHelp" value="@Model.Id" name="Id" placeholder="Enter assets Name">
+                <input type="text" class="form-control" hidden id="" aria-describedby="" value="@Model?.Id" name="Id" placeholder="Enter assets Name">
 
                 <div class="form-group mt-2">
                     <label for="exampleInputEmail1">Name</label>
-                    <input type="text" class="form-control" id="" aria-describedby="emailHelp" value="@Model.Name" name="Name" placeholder="Enter assets Name">
+                    <input type="text" class="form-control" id="" aria-describedby="" value="@Model?.Name" name="Name" placeholder="Enter assets Name">
+                <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group mt-2">
                     <label for="exampleInputEmail1">Description</label>
-                    <input type="text" class="form-control" id="" aria-describedby="emailHelp" value="@Model.Description" name="Description" placeholder="Enter assets Description">
+                    <input type="text" class="form-control" id="" aria-describedby="" value="@Model?.Description" name="Description" placeholder="Enter assets Description">
+                    <span asp-validation-for="Description" class="text-danger"></span>
+
                 </div>
 
                 <div class="form-group mt-2">
                     <label for="exampleInputEmail1">PurchasingPrice</label>
-                    <input type="text" class="form-control" id="" aria-describedby="emailHelp" value="@Model.PurchasingPrice" name="PurchasingPrice" placeholder="Enter assets PurchasingPrice">
+                    <input type="text" class="form-control" id="" aria-describedby="" value="@Model?.PurchasingPrice" name="PurchasingPrice" placeholder="Enter assets PurchasingPrice">
+                    <span asp-validation-for="PurchasingPrice" class="text-danger"></span>
+
                 </div>
                
                 <div class="form-group mt-2">
                     <label>Update Image:</label>
-                    @if (string.IsNullOrEmpty(@Model.ImagePath))
+                    @if (string.IsNullOrEmpty(@Model?.ImagePath))
                     {
                         <td><img src="~/dummy.png" width="50" height="50" style="border-radius :100% " /></td>
                     }
                     else
                     {
-                        <td><img src="~/@Model.ImagePath" width="50" height="50" style="border-radius :100% "></td>
+                        <td><img src="~/@Model?.ImagePath" width="50" height="50" style="border-radius :100% "></td>
                     }
                   
                     <input type="file" name="image" class="file-input" />

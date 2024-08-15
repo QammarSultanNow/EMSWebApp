@@ -3,19 +3,33 @@
     ViewData["Title"] = "GetDepartmentById";
 }
 
-<h1>Update Deparment Name</h1>
 
-<div class="container-fluid">
-    <form action="/Department/UpdateDepartmentName/@Model.Id">
 
-        <div class="mb-3">
-            <label for="">DepartmentName</label>
-            <input type="text" name="DepartmentName" value="@Model.DepartmentName" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Name">
+<div id="wrapper">
+
+    <div class="container-fluid">
+
+        <div class="shadow p-3 mb-5 bg-white rounded">
+            <h1>Update Deparment Name</h1>
+
+            <div class="container-fluid">
+                <form method="post" asp-controller="Department" asp-action="UpdateDepartmentName">
+                    <input type="text" name="Id" hidden value="@Model?.Id" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Name">
+
+                    <div class="mb-3">
+                        <label for="">DepartmentName</label>
+                        <input type="text" name="DepartmentName" value="@Model?.DepartmentName" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Name">
+                        <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                    </div>
+
+                    <div style="margin-top: 25px;">
+                        <button type="submit" class="btn btn-primary" style="margin-top: 10px">Submit</button>
+                    </div>
+
+                </form>
+            </div>
         </div>
-
-        <div style="margin-top: 25px;">
-            <button type="submit" class="btn btn-primary" style="margin-top: 10px">Submit</button>
-        </div>
-
-    </form>
+    </div>
 </div>
+
+
