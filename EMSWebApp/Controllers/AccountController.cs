@@ -18,19 +18,29 @@ using ApplicationCore.UseCases.Employees.DeleteEmployees;
 using ApplicationCore.UseCases.Employees.GetEmployeesById;
 using ApplicationCore.UseCases.Departments.GetDepartment;
 using ApplicationCore.UseCases.Employees.EmployeesExportExcel;
+using FluentValidation;
+using ApplicationCore.Validations;
+using System.ComponentModel.DataAnnotations;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 
 namespace EMSWebApp.Controllers
 {
+
+
     [Authorize]
     public class AccountController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IValidator<CreateEmployeesRequest> _validator;
+        private readonly IValidator<UpdateEmployeeRequest> _validatorUpdate;
 
-        public AccountController(IMediator mediator)
+        public AccountController(IMediator mediator, IValidator<CreateEmployeesRequest> validator, IValidator<UpdateEmployeeRequest> validatorUpdate)
         {
             _mediator = mediator;
+            _validator = validator;
+            _validatorUpdate = validatorUpdate;
         }
 
         public IActionResult Index()
@@ -45,8 +55,9 @@ namespace EMSWebApp.Controllers
             try
             {
                 var departments = await _mediator.Send(new GetDepartmentRequest());
+                ViewBag.Department = departments;
                 //var result = await _dptRrepository.GetAllDepartment();
-                return View(departments);
+                return View();
             }
             catch (Exception ex) 
             {
@@ -57,11 +68,25 @@ namespace EMSWebApp.Controllers
 
 
         [Route("Account/AddEmployee")]
-        public async Task<IActionResult> AddEmployee(CreateEmployeesRequest request)
+        public async Task<IActionResult> EmployeeRegistrationForm(CreateEmployeesRequest request)
         {
             try
             {
+                var validation = await _validator.ValidateAsync(request);
+                if (!validation.IsValid)
+                {
+                    foreach (var i in validation.Errors)
+                    {
+
+                        ModelState.AddModelError(i.PropertyName, i.ErrorMessage);
+                    }
+                    var departments = await _mediator.Send(new GetDepartmentRequest());
+                    ViewBag.Department = departments;
+                    return View();
+                }
+
                 request.CreatedOn = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+                //request.ImagePath = employee.ImagePath;
 
                 var result =  await _mediator.Send(request);
                 return RedirectToAction("GetAllEmployees");
@@ -110,7 +135,8 @@ namespace EMSWebApp.Controllers
         public async Task<IActionResult> UpdateEmployees(int id)
         {
             try
-            {
+
+            { 
                 var result = await _mediator.Send(new GetEmployeesByIdRequest { Id = id });
 
                 var departments = await _mediator.Send(new GetDepartmentRequest());
@@ -126,11 +152,21 @@ namespace EMSWebApp.Controllers
         }
 
         [Route("Account/UpdateEmployeesRecord/{id}")]
-        public async Task<IActionResult> UpdateEmployeesRecord(UpdateEmployeeRequest request, EmployeeInformation employee, [FromForm] IFormFile image, int id)
+        public async Task<IActionResult> UpdateEmployees(UpdateEmployeeRequest request)
         {
             try
             {
-                request.ImagePath = employee.ImagePath;
+               var validation = await _validatorUpdate.ValidateAsync(request);
+
+                if (!validation.IsValid)
+                {
+                    foreach(var item in validation.Errors)
+                    {
+                        ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
+                    }
+                   
+                    return View();
+                }
 
                 var result = await _mediator.Send(request);
                 return RedirectToAction("GetAllEmployees");

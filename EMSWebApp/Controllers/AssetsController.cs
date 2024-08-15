@@ -21,6 +21,8 @@ using ApplicationCore.UseCases.Assets.GetEmployeeOnDptId;
 using ApplicationCore.UseCases.Departments.GetDepartment;
 using ApplicationCore.UseCases.Assets.GetAssestById;
 using ApplicationCore.UseCases.Assets.ExportExcelSheet;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace EMSWebApp.Controllers
 {
@@ -28,9 +30,11 @@ namespace EMSWebApp.Controllers
     public class AssetsController : Controller
     {
         private readonly IMediator _mediator;
-        public AssetsController(IExportEmployeeExcelSheet exportAseetExcelSheet, IUploadImageService uploadImageService, IDepartmentRepository departmentRepository, IMediator mediator)
+        private readonly IValidator<CreateAssetsRequst> _validator;
+        public AssetsController(IExportEmployeeExcelSheet exportAseetExcelSheet, IUploadImageService uploadImageService, IDepartmentRepository departmentRepository, IMediator mediator, IValidator<CreateAssetsRequst> validator)
         {
             _mediator = mediator;
+            _validator = validator;
         }
         public IActionResult Index()
         {
@@ -46,7 +50,18 @@ namespace EMSWebApp.Controllers
         [Route("Assets/AddAssets")]
         public async Task<IActionResult> AddAssets(CreateAssetsRequst requst)
         {
-        
+            var validation = await  _validator.ValidateAsync(requst);
+            if (!validation.IsValid)
+            {
+                foreach (var item in validation.Errors)
+                {
+                    ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
+                }
+                return View();
+
+            }
+
+
             requst.CreatedAt = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
             requst.Status = EssetEnum.Available.ToString();
 

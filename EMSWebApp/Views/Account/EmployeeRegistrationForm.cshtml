@@ -1,64 +1,77 @@
-﻿@model IEnumerable<ApplicationCore.Models.DepartmentEmployeeCount>
+﻿@model ApplicationCore.UseCases.Employees.CreateEmployee.CreateEmployeesRequest
 @{
     ViewData["Title"] = "EmployeeRegistrationForm";
 }
 
-    <div id="wrapper">
-        <div class="container-fluid">
+<div id="wrapper">
 
-             <div class="shadow p-3 mb-5 bg-white rounded">
-                        <h2>Employee Registration  </h2>
-                        <form asp-controller="Account" asp-action="AddEmployee" method="post" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <label for="">Name</label>
-                                <input type="text" name="Name" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Name" required>
-                            </div>
+    <div class="container-fluid">
 
-                            <div class="mb-3">
-                                <label for="">Email</label>
-                                <input type="email" name="Email" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Email" required>
-                            </div>
+        <div class="shadow p-3 mb-5 bg-white rounded">
+          
+            <h2>Employee Registration  </h2>
 
-                            <div class="mb-3">
-                                <label for="">Adress</label>
-                                <input type="text" name="Adress" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Adress" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="">Designation</label>
-                                <input type="text" name="Designation" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Designation" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="">ContactNo</label>
-                                <input type="text" name="ContactNo" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter ContactNo" required>
-                            </div>
+            <form asp-controller="Account" asp-action="AddEmployee" method="post" enctype="multipart/form-data">
 
-                            <input type="file" name="image" class="input-files" />
-
-                            <div>
-                                <label for="">Department: </label>
-
-                                <select class="form-control" name="DepartmentId" id="" required>
-                                    <option value="">Select Department Name</option>
-                                    @foreach (var i in Model)
-                                    {
-                                        <option value="@i.Id">@i.DepartmentName</option>
-                                    }
-                                </select>
-                            </div>
-
-                            <div class="d-grid gap-2" style="margin-top: 25px;">
-                                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 10px">Submit</button>
-
-                            </div>
-                        </form>
+                <div class="mb-3">
+                        <label for="">Name</label>
+                        <input type="text" name="Name" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Name" required>
+                    <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
-                
+
+                    <div class="mb-3">
+                        <label for="">Email</label>
+                        <input type="email" name="Email" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Email" required>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="">Adress</label>
+                        <input type="text" name="Adress" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Adress" required>
+                    <span asp-validation-for="Adress" class="text-danger"></span>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="">Designation</label>
+                        <input type="text" name="Designation" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Designation" required>
+                        <span asp-validation-for="Designation" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="">ContactNo</label>
+                        <input type="text" name="ContactNo" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter ContactNo" required>
+                    <span asp-validation-for="ContactNo" class="text-danger"></span>
+                    </div>
+
+                    <input type="file" name="image" class="input-files" />
+
+                    <div>
+                        <label for="">Department: </label>
+
+                        <select class="form-control" name="DepartmentId" id="" required>
+                            <option value="">Select Department Name</option>
+                        @if (ViewBag.Department != null)
+                        {
+                            @foreach (var i in ViewBag.Department)
+                            {
+                                <option value="@i.Id">@i.DepartmentName</option>
+                            }
+                        }
+                    </select>
+                    </div>
+
+                    <div class="d-grid gap-2" style="margin-top: 25px;">
+                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 10px">Submit</button>
+
+                    </div>
+                </form>
+            </div>
+
         </div>
     </div>
 
 
 
-@* @section Scripts {
+                @* @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

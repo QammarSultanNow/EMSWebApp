@@ -1,4 +1,10 @@
 ﻿using ApplicationCore.Models;
+using ApplicationCore.UseCases.Employees.CreateEmployee;
+using ApplicationCore.ValidationBehavior;
+using ApplicationCore.Validations;
+using Azure.Core;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -17,9 +23,13 @@ namespace ApplicationCore
             //Add AutoMapper
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+            //Add Fluent Validations
+            services.AddValidatorsFromAssemblyContaining<CreateEmployeesRequestValidators>()                                                                ;
+
             // Add Mediator
             services.AddMediatR(conf => conf.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-           
+
+
         }
     }
 }

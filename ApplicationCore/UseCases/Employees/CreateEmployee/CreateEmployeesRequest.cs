@@ -18,21 +18,20 @@ namespace ApplicationCore.UseCases.Employees.CreateEmployee
         [Key]
         public int Id { get; set; }
 
-        [Required]
+       
         public string Name { get; set; }
 
-        [Required]
-        [EmailAddress]
+       
         public string Email { get; set; }
 
-        [Required]
+        
         public string Adress { get; set; }
 
 
-        [Required]
+     
         public string Designation { get; set; }
 
-        [Required]
+   
         public string ContactNo { get; set; }
 
         public string? ImagePath { get; set; }

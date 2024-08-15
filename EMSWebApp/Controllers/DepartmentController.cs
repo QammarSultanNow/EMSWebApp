@@ -7,6 +7,7 @@ using ApplicationCore.UseCases.Departments.GetDepartment;
 using ApplicationCore.UseCases.Departments.GetDepartmentById;
 using ApplicationCore.UseCases.Departments.UpdateDepartment;
 using EMSWebApp.Interface;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +19,12 @@ namespace EMSWebApp.Controllers
     public class DepartmentController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IValidator<CreateDepartmentRequest> _validator;
 
-        public DepartmentController(IMediator mediator)
+        public DepartmentController(IMediator mediator, IValidator<CreateDepartmentRequest> validator)
         {
             _mediator = mediator;
-
+            _validator = validator;
         }
         //public IActionResult Index()
         //{
@@ -38,10 +40,21 @@ namespace EMSWebApp.Controllers
 
 
         [Route("Department/AddDepartmentAsync")]
-        public async Task<IActionResult> AddDepartmentAsync(CreateDepartmentRequest request)
+        public async Task<IActionResult> DepartmentForm(CreateDepartmentRequest request)
         {
             try
             {
+               var validation =  await _validator.ValidateAsync(request);
+
+                if (!validation.IsValid)
+                {
+                    foreach(var i in validation.Errors)
+                    {
+                        ModelState.AddModelError(i.PropertyName, i.ErrorMessage);
+                    }
+                    return View();
+                }
+
                 var result = await _mediator.Send(request);
                 return RedirectToAction("DeparmentsData");
             }

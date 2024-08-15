@@ -1,0 +1,32 @@
+﻿<div id="wrapper">
+
+    <div class="container-fluid">
+
+        <div class="shadow p-3 mb-5 bg-white rounded">
+            <div>
+                <h2>Errors</h2>
+
+                @if (ViewBag.ErrorList != null)
+                {
+                    <ul>
+                        @foreach (var i in ViewBag.ErrorList)
+                        {
+                            <li class="btn btn-danger mt-3">@i</li>
+                            <br />
+                        }
+                    </ul>
+
+                }
+            </div>
+
+            <div class="d-flex justify-content-end mt-3" style="margin-right :40px">
+                <a href="/Department/DepartmentForm" class="btn btn-success btn-icon-split">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-arrow-left"></i>
+                    </span>
+                    <span class="text">Back to Registration Page</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

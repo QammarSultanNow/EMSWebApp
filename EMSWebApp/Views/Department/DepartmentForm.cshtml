@@ -1,4 +1,4 @@
-﻿
+﻿@model ApplicationCore.UseCases.Departments.CreateDepartment.CreateDepartmentRequest;
 @{
     ViewData["Title"] = "DepartmentForm";
 }
@@ -13,6 +13,7 @@
                         <div class="mb-3">
                             <label for="">Department Name</label>
                             <input type="text" name="DepartmentName" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Department Name" required>
+                        <span asp-validation-for="DepartmentName" class="text-danger"></span>
                         </div>
 
                         <div class="d-grid gap-2" style="margin-top: 25px;">

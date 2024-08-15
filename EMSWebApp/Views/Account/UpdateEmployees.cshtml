@@ -7,48 +7,58 @@
 
         <div class=" shadow p-3 mb-5 bg-white rounded" ; margin : auto">
             <h2>Update Employee Form</h2>
-            <form action="/Account/UpdateEmployeesRecord/@Model.Id" method="post" enctype="multipart/form-data">
+            <form action="/Account/UpdateEmployeesRecord/@Model?.Id" method="post" enctype="multipart/form-data">
 
                 <div class="mb-3">
                     <label for="">Name</label>
-                    <input type="text" name="Name" value="@Model.Name" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Name">
+                    <input type="text" name="Name" value="@Model?.Name" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Name">
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
 
 
                 <div class="mb-3">
                     <label for="">Email</label>
-                    <input type="email" name="Email" value="@Model.Email" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Email">
+                    <input type="email" name="Email" value="@Model?.Email" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Email">
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
 
 
                 <div class="mb-3">
                     <label for="">Adress</label>
-                    <input type="text" name="Adress" value="@Model.Adress" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Adress">
+                    <input type="text" name="Adress" value="@Model?.Adress" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Adress">
+                    <span asp-validation-for="Adress" class="text-danger"></span>
                 </div>
 
 
                 <div class="mb-3">
                     <label for="">Designation</label>
-                    <input type="text" name="Designation" value="@Model.Designation" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Designation">
+                    <input type="text" name="Designation" value="@Model?.Designation" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter Designation">
+                    <span asp-validation-for="Designation" class="text-danger"></span>
                 </div>
 
-                <img src="~/@Model.ImagePath" width="50" height="50" style="" />
+                <img src="~/@Model?.ImagePath" width="50" height="50" style="" />
                 <input type="file" name="image" class="input-files" />
 
                 <div class="mb-3">
                     <label for="">ContactNo</label>
-                    <input type="text" name="ContactNo" value="@Model.ContactNo" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter ContactNo">
+                    <input type="text" name="ContactNo" value="@Model?.ContactNo" class="form-control" id="" aria-describedby="emailHelp" placeholder="Enter ContactNo">
+
                 </div>
 
 
                 <div class="mb-3">
 
                     <select class="form-control" name="DepartmentId">
-                        <option value="@Model.Department.Id">@Model.Department.DepartmentName</option>
-                        @foreach (var i in @ViewBag.Departments)
+                        <option value="@Model?.Department.Id">@Model?.Department.DepartmentName</option>
+                        @if (ViewBag.Departments != null)
                         {
-                            <option value="@i.Id">@i.DepartmentName</option>
+                            @foreach (var i in @ViewBag.Departments)
+                            {
+                                <option value="@i.Id">@i.DepartmentName</option>
+                            }
+                            
                         }
+                       
                     </select>
                 </div>
 

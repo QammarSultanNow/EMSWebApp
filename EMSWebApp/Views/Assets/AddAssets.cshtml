@@ -6,16 +6,18 @@
     <div class="container-fluid">
 
         <div class="shadow p-3 mb-5 bg-white rounded">
-
+           // @Html.ValidationSummary()
             <form method="post" asp-controller="Assets" asp-action="AddAssets" enctype="multipart/form-data">
                 <h2>ADD ASSET</h2>
                 <div class="form-group mt-2">
                     <label for="">Name</label>
                     <input type="text" class="form-control" id="" aria-describedby="emailHelp" name="Name" placeholder="Enter assets Name" required>
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group mt-2">
                     <label for="">Description</label>
                     <input type="text" class="form-control" id="" aria-describedby="emailHelp" name="Description" placeholder="Enter assets Description" required>
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-group mt-2">
                     <label>Choose Asset Image:</label> <br />
@@ -25,6 +27,7 @@
                 <div class="form-group mt-2">
                     <label for="">PurchasingPrice</label>
                     <input type="text" class="form-control" id="" aria-describedby="emailHelp" name="PurchasingPrice" placeholder="Enter assets PurchasingPrice" required>
+                    <span asp-validation-for="PurchasingPrice" class="text-danger"></span>
                 </div>
 
 
